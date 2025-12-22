@@ -1,0 +1,730 @@
+:root{
+  --prussian:#0b2c3d;
+  --prussian2:#0f3a52;
+
+  --paper:#ffffff;
+  --mist:#f3f6f8;
+  --ink:#0f172a;
+  --line: rgba(15,23,42,.12);
+
+  --shadowBand: 0 30px 80px rgba(0,0,0,.35);
+  --shadowVideo: 0 22px 60px rgba(0,0,0,.18);
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+body{
+  margin:0;
+  font-family:"Noto Sans TC", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  color: var(--ink);
+  background: var(--mist);
+}
+
+.container{ width:min(1020px, calc(100% - 44px)); margin:0 auto; }
+
+/* =========================
+   NAV
+========================= */
+.nav{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11,44,61,.86);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+.nav__wrap{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 10px 0;
+  gap: 12px;
+  flex-wrap:wrap;
+}
+.nav__brand{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  color:#fff;
+  font-family:"Noto Serif TC", serif;
+}
+.dot{ width:10px;height:10px;border-radius:999px; background:#fff; opacity:.85; }
+.nav__brand .muted{ opacity:.78; font-size: 13px; }
+
+.nav__links{ display:flex; gap:14px; flex-wrap:wrap; }
+.nav__links a{
+  color:#fff;
+  text-decoration:none;
+  opacity:.82;
+  font-size: 14px;
+  position: relative;
+}
+.nav__links a:hover{ opacity:1; }
+
+/* 導覽列隨區塊高亮 */
+.nav__links a.is-active{ opacity: 1; }
+.nav__links a.is-active::after{
+  content:"";
+  position:absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: rgba(255,255,255,.85);
+  border-radius: 2px;
+}
+
+/* =========================
+   HERO
+========================= */
+.hero{
+  position: relative;
+  min-height: 86vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+
+  /* 封面背景：照片 + 藍色濾鏡 */
+  background-image:
+    linear-gradient(
+      140deg,
+      rgba(11,44,61,.78) 0%,
+      rgba(15,58,82,.72) 60%,
+      rgba(11,44,61,.82) 100%
+    ),
+    url("img/6.jpg");
+
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
+
+.hero__overlay{
+  position:absolute; inset:0;
+  background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 18px 18px;
+  opacity:.6;
+}
+
+.hero__content{ position:relative; padding: 90px 0 70px; color:#fff; }
+
+.kicker{
+  font-family:"Noto Serif TC", serif;
+  letter-spacing:.22em;
+  opacity:.92;
+  margin:0 0 10px;
+}
+.hero h1{
+  font-family:"Noto Serif TC", serif;
+  font-size: clamp(40px, 6vw, 64px);
+  margin:0 0 12px;
+}
+.subtitle{
+  max-width: 44ch;
+  font-size: 18px;
+  line-height:1.9;
+  opacity:.92;
+  margin: 0 0 18px;
+}
+.hero__chips{ display:flex; gap:10px; flex-wrap:wrap; margin: 10px 0 26px; }
+.chip{
+  border:1px solid rgba(255,255,255,.28);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  backdrop-filter: blur(6px);
+}
+.cta{
+  display:inline-block;
+  color:#fff;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,.32);
+  padding: 10px 14px;
+  border-radius: 999px;
+}
+
+/* Hero → First band：陰影式過渡（紙張底下的暗影） */
+.hero::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:-1px;
+  height: 140px;
+  pointer-events:none;
+  background: linear-gradient(
+    to bottom,
+    rgba(11,44,61,0) 0%,
+    rgba(11,44,61,.25) 35%,
+    rgba(11,44,61,.45) 70%,
+    rgba(11,44,61,.55) 100%
+  );
+  z-index: 2;
+}
+
+/* =========================
+   BANDS（區塊式浮現）
+========================= */
+.band{
+  position: relative;
+  padding: 92px 0;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: visible;
+  transition: color .6s ease, box-shadow .6s ease, transform .6s ease;
+  z-index: 1; /* 避免蓋住 Hero 的過渡 */
+}
+
+/* 藍底漸變層（active 才顯示） */
+.band .band-bg{
+  position:absolute;
+  inset:0;
+  background: linear-gradient(140deg, var(--prussian) 0%, var(--prussian2) 80%);
+  opacity: 0;
+  transition: opacity .85s ease;
+  z-index: 0;
+}
+
+/* 內容層 */
+.band .band-inner{ position: relative; z-index: 2; }
+
+/* ===== Band 斜切（before + after 都暗影式，交錯方向） ===== */
+.band::before,
+.band::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  height:46px;
+  pointer-events:none;
+  z-index:1;
+
+  /* 白段：暗影式漸層（一路承接 Hero 的暗影系統） */
+  background: linear-gradient(
+    to bottom,
+    rgba(11,44,61,.30) 0%,
+    rgba(11,44,61,.16) 42%,
+    rgba(11,44,61,.07) 75%,
+    rgba(11,44,61,0) 100%
+  );
+}
+
+/* 奇數段（預設）：上緣斜向右、下緣斜向左 */
+.band::before{
+  top:-46px;
+  clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%);
+}
+.band::after{
+  bottom:-46px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0);
+}
+
+/* 偶數段：方向反過來（交錯翻頁） */
+.band:nth-of-type(even)::before{
+  clip-path: polygon(0 0, 100% 100%, 100% 100%, 0 100%);
+}
+.band:nth-of-type(even)::after{
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 100%);
+}
+
+/* Active：藍底 + 陰影 */
+.band.is-active{
+  color: #fff;
+  box-shadow: var(--shadowBand);
+  transform: translateY(-2px);
+  z-index: 2;
+}
+.band.is-active .band-bg{ opacity: 1; }
+
+/* Active 藍段：上下斜切都用更深陰影（不會亮線） */
+.band.is-active::before,
+.band.is-active::after{
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.46) 0%,
+    rgba(0,0,0,.28) 45%,
+    rgba(0,0,0,.13) 78%,
+    rgba(0,0,0,0) 100%
+  );
+}
+
+/* 文字跟著區塊浮現 */
+.band .band-inner{
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .75s ease, transform .75s ease;
+}
+.band.is-active .band-inner{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 字色收斂 */
+.band :is(h2,h3,p,li){ color: var(--ink); }
+.band.is-active :is(h2,h3,p,li){ color: rgba(255,255,255,.92); }
+.band.is-active a{
+  color: rgba(255,255,255,.96);
+  text-decoration-color: rgba(255,255,255,.35);
+}
+
+/* Chapter meta（你 HTML 是 meta，不是 chapter，這裡補兩個都支援） */
+.meta,
+.chapter{
+  font-family:"Noto Serif TC", serif;
+  letter-spacing:.14em;
+  text-transform: uppercase;
+  font-size: 12px;
+  opacity: .72;
+  margin-bottom: 10px;
+}
+.band.is-active .meta,
+.band.is-active .chapter{ opacity: .80; }
+
+/* Typography */
+h2{
+  font-family:"Noto Serif TC", serif;
+  font-size: 28px;
+  margin: 10px 0 14px;
+}
+h3{
+  margin:0 0 6px;
+  font-size: 18px;
+  font-family:"Noto Serif TC", serif;
+}
+p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
+
+.note{
+  border-left: 3px solid rgba(11,44,61,.35);
+  padding-left: 12px;
+  opacity:.9;
+}
+.band.is-active .note{
+  border-left-color: rgba(255,255,255,.30);
+  color: rgba(255,255,255,.88);
+}
+.note--subtle{ opacity: .78; margin-top: 14px; }
+
+/* =========================
+   #story 上緣：暗影系統 + 紙纖維微亮（覆蓋 band::before）
+========================= */
+#story.band::before{
+  background:
+    radial-gradient(rgba(255,255,255,.10) 1px, transparent 1px),
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.34) 0%,
+      rgba(0,0,0,.20) 45%,
+      rgba(0,0,0,.08) 75%,
+      rgba(0,0,0,0) 100%
+    );
+  background-size: 24px 24px, auto;
+  background-position: 0 0, 0 0;
+  box-shadow:
+    0 -1px 0 rgba(255,255,255,.22) inset,
+    0 -10px 22px rgba(255,255,255,.06) inset;
+}
+
+/* #story Active 時仍保留一點反光 */
+#story.band.is-active::before{
+  box-shadow:
+    0 -1px 0 rgba(255,255,255,.30) inset,
+    0 -12px 26px rgba(255,255,255,.08) inset;
+}
+
+/* =========================
+   Principle split
+========================= */
+.bullets{ margin:0; padding-left: 18px; }
+.bullets li{ margin: 8px 0; line-height: 1.8; }
+
+.split{
+  margin-top: 18px;
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.mini{
+  border:1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  background: rgba(243,246,248,.65);
+}
+.band.is-active .mini{
+  background: rgba(0,0,0,.18);
+  border-color: rgba(255,255,255,.18);
+}
+.mini h3{ font-size: 16px; }
+
+/* =========================
+   Steps（乾淨版）
+========================= */
+.steps{ margin-top: 12px; display:grid; gap: 12px; }
+.step{
+  display:grid;
+  grid-template-columns: 52px 1fr;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.step:last-child{ border-bottom: 0; }
+
+.step__no{
+  width: 44px; height: 44px;
+  border-radius: 999px;
+  display:flex; align-items:center; justify-content:center;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-weight: 700;
+  font-family:"Noto Serif TC", serif;
+}
+.band.is-active .step{ border-bottom-color: rgba(255,255,255,.14); }
+.band.is-active .step__no{
+  border-color: rgba(255,255,255,.22);
+  color: rgba(255,255,255,.92);
+}
+
+/* =========================
+   Howto grid（左文字右影片）
+========================= */
+.howto-grid{
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1.05fr 1.15fr;
+  gap: 28px;
+  align-items: start;
+}
+.howto-video{
+  display: flex;
+  align-items: center;      /* 右側垂直置中 */
+  justify-content: center;  /* 水平置中 */
+  min-height: 520px;
+}
+.video-wrap{
+  width: 100%;
+  max-width: 560px;
+}
+
+/* Video frame */
+.video{
+  border-radius: 18px;
+  overflow:hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadowVideo);
+}
+.video iframe{
+  width:100%;
+  aspect-ratio: 16 / 9;
+  display:block;
+}
+.video-caption{
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: .82;
+}
+.band.is-active .video{
+  border-color: rgba(255,255,255,.20);
+  box-shadow: 0 34px 90px rgba(0,0,0,.35);
+}
+
+/* =========================
+   Gallery
+========================= */
+/* =========================
+   Marquee Gallery（跑馬燈）
+========================= */
+.marquee{
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  overflow: hidden;
+  background: rgba(255,255,255,.65);
+  box-shadow: 0 18px 50px rgba(0,0,0,.12);
+  position: relative;
+}
+
+/* 邊緣柔焦（讓跑馬燈更像展示帶） */
+.marquee::before,
+.marquee::after{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  width: 80px;
+  pointer-events:none;
+  z-index: 2;
+}
+.marquee::before{
+  left:0;
+  background: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0));
+}
+.marquee::after{
+  right:0;
+  background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0));
+}
+
+/* 跑馬燈軌道 */
+.marquee__track{
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  width: max-content;
+  animation: marqueeMove 26s linear infinite;
+  will-change: transform;
+}
+
+/* 懸停暫停（桌機很好用） */
+.marquee:hover .marquee__track{
+  animation-play-state: paused;
+}
+
+/* 單張作品卡（乾淨、可視覺一致） */
+.shot{
+  margin: 0;
+  flex: 0 0 auto;
+  width: 320px;
+  height: 220px;
+  border-radius: 0;
+  overflow: hidden;
+  border: 1px solid rgba(15,23,42,.14);
+  background: #f5f7f9;
+  box-shadow: 0 14px 40px rgba(0,0,0,.14);
+}
+.shot img{
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: cover;
+  display:block;
+  transform: scale(1.01);
+}
+
+/* Active 藍底時：外框和陰影一致化 */
+.band.is-active .marquee{
+  background: rgba(0,0,0,.14);
+  border-color: rgba(255,255,255,.16);
+}
+.band.is-active .marquee::before{
+  background: linear-gradient(to right, rgba(11,44,61,1), rgba(11,44,61,0));
+}
+.band.is-active .marquee::after{
+  background: linear-gradient(to left, rgba(11,44,61,1), rgba(11,44,61,0));
+}
+.band.is-active .shot{
+  border-color: rgba(255,255,255,.14);
+  box-shadow: 0 20px 60px rgba(0,0,0,.32);
+}
+
+/* 無縫移動：走一半（因為我們複製兩輪） */
+@keyframes marqueeMove{
+  from{ transform: translateX(0); }
+  to{ transform: translateX(-50%); }
+}
+
+/* 手機：縮小卡片、放慢速度 */
+@media (max-width: 720px){
+  .marquee__track{
+    padding: 12px;
+    gap: 10px;
+    animation-duration: 34s;
+  }
+  .shot{
+    width: 260px;
+    height: 180px;
+  }
+}
+
+/* =========================
+   Footer
+========================= */
+.footer{
+  background: linear-gradient(140deg, var(--prussian) 0%, var(--prussian2) 80%);
+  color:#fff;
+  padding: 26px 0;
+}
+.footer__bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  flex-wrap:wrap;
+}
+.brand{ font-family:"Noto Serif TC", serif; font-weight:700; }
+.footer .muted{ opacity:.8; font-size: 14px; }
+.top{
+  color:#fff; text-decoration:none;
+  border:1px solid rgba(255,255,255,.28);
+  padding: 8px 12px;
+  border-radius: 999px;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 900px){
+  .howto-grid{ grid-template-columns: 1fr; gap: 18px; }
+  .howto-video{ min-height: auto; }
+  .video-wrap{ max-width: 100%; }
+}
+
+@media (max-width: 720px){
+  .band{ padding: 72px 0; }
+
+  .band::before,
+  .band::after{ height:32px; }
+
+  .band::before{ top:-32px; }
+  .band::after{ bottom:-32px; }
+
+  .split{ grid-template-columns: 1fr; }
+  .grid{ grid-template-columns: 1fr; }
+  .grid img{ height: 220px; }
+
+  .hero::after{ height: 110px; }
+}
+
+/* 修正 band 上緣陰影方向（避免上方灰帶） */
+.band::before{
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,.06) 45%,
+    rgba(0,0,0,.16) 75%,
+    rgba(0,0,0,.28) 100%
+  );
+}
+
+/* Active 藍段：上緣陰影也要貼邊 */
+.band.is-active::before{
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,.10) 45%,
+    rgba(0,0,0,.26) 80%,
+    rgba(0,0,0,.42) 100%
+  );
+}
+
+/* 最後一個 band：取消下緣翻頁（after） */
+.band:last-of-type::after{
+  display: none;
+}
+
+/* ===== 修正：你已改用 marquee，因此移除/覆蓋舊 grid 的殘留依賴 ===== */
+.grid{ display:none; }
+
+/* ===== 使用者偏好降低動態：停止跑馬燈 + 取消浮現移動（保留可讀性） ===== */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  .marquee__track{ animation: none !important; }
+  .band .band-inner{ transform:none !important; opacity: 1 !important; transition: none !important; }
+  .band{ transition: none !important; }
+  
+}
+
+/* ===== HERO Parallax Layer ===== */
+.hero{
+  position: relative;
+}
+
+/* 把封面圖當成 overlay 的一個獨立圖層 */
+.hero__overlay{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 圖片層：用 transform 做微視差 */
+.hero__overlay::before{
+  content:"";
+  position:absolute;
+  inset:-6% 0;
+  background-image: url("img/6.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: translate3d(0, var(--hero-shift, 0px), 0);
+  will-change: transform;
+}
+
+
+/* 你原本的點陣層，保留，但改成 ::after，疊在圖片上 */
+.hero__overlay::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 18px 18px;
+  opacity:.6;
+}
+
+/* 你原本 hero 的藍色濾鏡：改交給 hero 本身（不動你文字層） */
+.hero{
+  background-image: linear-gradient(
+    140deg,
+    rgba(11,44,61,.78) 0%,
+    rgba(15,58,82,.72) 60%,
+    rgba(11,44,61,.82) 100%
+  );
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* 降低動態：完全關閉視差 */
+@media (prefers-reduced-motion: reduce){
+  .hero__overlay::before{ transform:none !important; }
+}
+
+/* ===== Marquee → 一整條紙帶（方形、無卡片感） ===== */
+
+/* 紙帶本體：方形、邊框更像紙邊 */
+.marquee{
+  border-radius: 0;
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(15,23,42,.14);
+  box-shadow: 0 18px 50px rgba(0,0,0,.12);
+}
+
+/* 邊緣柔焦：改成「淡淡的紙邊遮罩」不要像玻璃卡 */
+.marquee::before,
+.marquee::after{
+  width: 64px;
+}
+
+/* 軌道：把間距縮小，讓它像貼在同一條紙上 */
+.marquee__track{
+  gap: 10px;
+  padding: 14px 14px;
+}
+
+/* 每張作品：取消卡片陰影，改成「紙上貼圖」 */
+.shot{
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid rgba(15,23,42,.12);
+  background: #fff;
+}
+
+/* 圖片：方形、乾淨 */
+.shot img{
+  border-radius: 0;
+  transform: none;
+}
+
+/* Active 藍底時：紙帶仍然是「深色環境下的一條帶」 */
+.band.is-active .marquee{
+  background: rgba(0,0,0,.10);
+  border-color: rgba(255,255,255,.16);
+  box-shadow: 0 26px 70px rgba(0,0,0,.30);
+}
+.band.is-active .shot{
+  border-color: rgba(255,255,255,.14);
+}
+
+/* 手機：更像帶狀，稍微縮小間距 */
+@media (max-width: 720px){
+  .marquee__track{
+    padding: 12px;
+    gap: 8px;
+  }
+}
