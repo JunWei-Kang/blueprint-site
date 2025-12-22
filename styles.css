@@ -728,3 +728,14 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
     gap: 8px;
   }
 }
+
+.logo-mark{
+  font-family:"Noto Serif TC", serif;
+  font-weight:700;
+  letter-spacing:.08em;
+}
+
+.logo-text .en{
+  font-size: 12px;
+  opacity:.75;
+}
