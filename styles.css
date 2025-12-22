@@ -34,6 +34,7 @@ body{
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255,255,255,.10);
 }
+
 .nav__wrap{
   display:flex;
   align-items:center;
@@ -42,17 +43,45 @@ body{
   gap: 12px;
   flex-wrap:wrap;
 }
+
+/* ✅ 你想放圖片 logo 的版本：用 center 對齊（不要 baseline） */
 .nav__brand{
   display:flex;
-  align-items:baseline;
+  align-items:center;
   gap:10px;
   color:#fff;
   font-family:"Noto Serif TC", serif;
 }
+
+/* 可選：如果你還保留 dot 的 HTML */
 .dot{ width:10px;height:10px;border-radius:999px; background:#fff; opacity:.85; }
-.nav__brand .muted{ opacity:.78; font-size: 13px; }
+
+.logo-img{
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+  display:block;
+  border-radius: 6px; /* 想完全方形改 0 */
+}
+
+.logo-text{
+  display:flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.logo-text .zh{
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.logo-text .en{
+  font-size: 12px;
+  opacity:.75;
+}
 
 .nav__links{ display:flex; gap:14px; flex-wrap:wrap; }
+
 .nav__links a{
   color:#fff;
   text-decoration:none;
@@ -76,7 +105,9 @@ body{
 }
 
 /* =========================
-   HERO
+   HERO（封面照片＋非常輕微視差）
+   - hero 只放藍色濾鏡
+   - 照片放在 .hero__overlay::before
 ========================= */
 .hero{
   position: relative;
@@ -85,23 +116,43 @@ body{
   align-items: center;
   overflow: hidden;
 
-  /* 封面背景：照片 + 藍色濾鏡 */
-  background-image:
-    linear-gradient(
-      140deg,
-      rgba(11,44,61,.78) 0%,
-      rgba(15,58,82,.72) 60%,
-      rgba(11,44,61,.82) 100%
-    ),
-    url("img/6.jpg");
-
-  background-size: cover, cover;
-  background-position: center, center;
-  background-repeat: no-repeat, no-repeat;
+  /* 藍色濾鏡（不含照片） */
+  background-image: linear-gradient(
+    140deg,
+    rgba(11,44,61,.78) 0%,
+    rgba(15,58,82,.72) 60%,
+    rgba(11,44,61,.82) 100%
+  );
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero__overlay{
-  position:absolute; inset:0;
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+/* 照片層：用 transform 做非常輕微視差（JS 設定 --hero-shift） */
+.hero__overlay::before{
+  content:"";
+  position:absolute;
+  inset:-6% 0; /* 稍微放大，避免位移露邊 */
+  background-image: url("img/6.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: translate3d(0, var(--hero-shift, 0px), 0);
+  will-change: transform;
+}
+
+/* 點陣層（疊在照片上） */
+.hero__overlay::after{
+  content:"";
+  position:absolute;
+  inset:0;
   background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
   background-size: 18px 18px;
   opacity:.6;
@@ -144,7 +195,7 @@ body{
   border-radius: 999px;
 }
 
-/* Hero → First band：陰影式過渡（紙張底下的暗影） */
+/* Hero → First band：陰影式過渡 */
 .hero::after{
   content:"";
   position:absolute;
@@ -171,7 +222,7 @@ body{
   color: var(--ink);
   overflow: visible;
   transition: color .6s ease, box-shadow .6s ease, transform .6s ease;
-  z-index: 1; /* 避免蓋住 Hero 的過渡 */
+  z-index: 1;
 }
 
 /* 藍底漸變層（active 才顯示） */
@@ -187,7 +238,7 @@ body{
 /* 內容層 */
 .band .band-inner{ position: relative; z-index: 2; }
 
-/* ===== Band 斜切（before + after 都暗影式，交錯方向） ===== */
+/* ===== Band 斜切陰影 ===== */
 .band::before,
 .band::after{
   content:"";
@@ -198,7 +249,6 @@ body{
   pointer-events:none;
   z-index:1;
 
-  /* 白段：暗影式漸層（一路承接 Hero 的暗影系統） */
   background: linear-gradient(
     to bottom,
     rgba(11,44,61,.30) 0%,
@@ -208,7 +258,6 @@ body{
   );
 }
 
-/* 奇數段（預設）：上緣斜向右、下緣斜向左 */
 .band::before{
   top:-46px;
   clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%);
@@ -218,7 +267,6 @@ body{
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0);
 }
 
-/* 偶數段：方向反過來（交錯翻頁） */
 .band:nth-of-type(even)::before{
   clip-path: polygon(0 0, 100% 100%, 100% 100%, 0 100%);
 }
@@ -235,7 +283,6 @@ body{
 }
 .band.is-active .band-bg{ opacity: 1; }
 
-/* Active 藍段：上下斜切都用更深陰影（不會亮線） */
 .band.is-active::before,
 .band.is-active::after{
   background: linear-gradient(
@@ -266,7 +313,7 @@ body{
   text-decoration-color: rgba(255,255,255,.35);
 }
 
-/* Chapter meta（你 HTML 是 meta，不是 chapter，這裡補兩個都支援） */
+/* Chapter meta */
 .meta,
 .chapter{
   font-family:"Noto Serif TC", serif;
@@ -304,7 +351,7 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 .note--subtle{ opacity: .78; margin-top: 14px; }
 
 /* =========================
-   #story 上緣：暗影系統 + 紙纖維微亮（覆蓋 band::before）
+   #story 上緣特效
 ========================= */
 #story.band::before{
   background:
@@ -323,7 +370,6 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
     0 -10px 22px rgba(255,255,255,.06) inset;
 }
 
-/* #story Active 時仍保留一點反光 */
 #story.band.is-active::before{
   box-shadow:
     0 -1px 0 rgba(255,255,255,.30) inset,
@@ -355,7 +401,7 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 .mini h3{ font-size: 16px; }
 
 /* =========================
-   Steps（乾淨版）
+   Steps
 ========================= */
 .steps{ margin-top: 12px; display:grid; gap: 12px; }
 .step{
@@ -395,8 +441,8 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 }
 .howto-video{
   display: flex;
-  align-items: center;      /* 右側垂直置中 */
-  justify-content: center;  /* 水平置中 */
+  align-items: center;
+  justify-content: center;
   min-height: 520px;
 }
 .video-wrap{
@@ -404,7 +450,6 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   max-width: 560px;
 }
 
-/* Video frame */
 .video{
   border-radius: 18px;
   overflow:hidden;
@@ -427,28 +472,25 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 }
 
 /* =========================
-   Gallery
-========================= */
-/* =========================
-   Marquee Gallery（跑馬燈）
+   Marquee Gallery（跑馬燈：一整條紙帶）
 ========================= */
 .marquee{
   margin-top: 14px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(15,23,42,.14);
   border-radius: 0;
   overflow: hidden;
-  background: rgba(255,255,255,.65);
+  background: rgba(255,255,255,.82);
   box-shadow: 0 18px 50px rgba(0,0,0,.12);
   position: relative;
 }
 
-/* 邊緣柔焦（讓跑馬燈更像展示帶） */
+/* 紙帶邊緣遮罩 */
 .marquee::before,
 .marquee::after{
   content:"";
   position:absolute;
   top:0; bottom:0;
-  width: 80px;
+  width: 64px;
   pointer-events:none;
   z-index: 2;
 }
@@ -461,22 +503,19 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0));
 }
 
-/* 跑馬燈軌道 */
 .marquee__track{
   display: flex;
-  gap: 14px;
-  padding: 16px;
+  gap: 10px;
+  padding: 14px;
   width: max-content;
   animation: marqueeMove 26s linear infinite;
   will-change: transform;
 }
 
-/* 懸停暫停（桌機很好用） */
 .marquee:hover .marquee__track{
   animation-play-state: paused;
 }
 
-/* 單張作品卡（乾淨、可視覺一致） */
 .shot{
   margin: 0;
   flex: 0 0 auto;
@@ -484,23 +523,24 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   height: 220px;
   border-radius: 0;
   overflow: hidden;
-  border: 1px solid rgba(15,23,42,.14);
-  background: #f5f7f9;
-  box-shadow: 0 14px 40px rgba(0,0,0,.14);
+  border: 1px solid rgba(15,23,42,.12);
+  background: #fff;
+  box-shadow: none;
 }
+
 .shot img{
   width: 100%;
   height: 100%;
-  border-radius: 0;
   object-fit: cover;
   display:block;
-  transform: scale(1.01);
+  transform: none;
 }
 
-/* Active 藍底時：外框和陰影一致化 */
+/* Active 藍底時 */
 .band.is-active .marquee{
-  background: rgba(0,0,0,.14);
+  background: rgba(0,0,0,.10);
   border-color: rgba(255,255,255,.16);
+  box-shadow: 0 26px 70px rgba(0,0,0,.30);
 }
 .band.is-active .marquee::before{
   background: linear-gradient(to right, rgba(11,44,61,1), rgba(11,44,61,0));
@@ -510,26 +550,12 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 }
 .band.is-active .shot{
   border-color: rgba(255,255,255,.14);
-  box-shadow: 0 20px 60px rgba(0,0,0,.32);
 }
 
-/* 無縫移動：走一半（因為我們複製兩輪） */
+/* 無縫移動：走一半（因為你複製兩輪） */
 @keyframes marqueeMove{
   from{ transform: translateX(0); }
   to{ transform: translateX(-50%); }
-}
-
-/* 手機：縮小卡片、放慢速度 */
-@media (max-width: 720px){
-  .marquee__track{
-    padding: 12px;
-    gap: 10px;
-    animation-duration: 34s;
-  }
-  .shot{
-    width: 260px;
-    height: 180px;
-  }
 }
 
 /* =========================
@@ -575,10 +601,18 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   .band::after{ bottom:-32px; }
 
   .split{ grid-template-columns: 1fr; }
-  .grid{ grid-template-columns: 1fr; }
-  .grid img{ height: 220px; }
 
   .hero::after{ height: 110px; }
+
+  .marquee__track{
+    padding: 12px;
+    gap: 8px;
+    animation-duration: 34s;
+  }
+  .shot{
+    width: 260px;
+    height: 180px;
+  }
 }
 
 /* 修正 band 上緣陰影方向（避免上方灰帶） */
@@ -608,139 +642,16 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   display: none;
 }
 
-/* ===== 修正：你已改用 marquee，因此移除/覆蓋舊 grid 的殘留依賴 ===== */
+/* 你已改用 marquee，因此隱藏舊 grid（若 HTML 還殘留） */
 .grid{ display:none; }
 
-/* ===== 使用者偏好降低動態：停止跑馬燈 + 取消浮現移動（保留可讀性） ===== */
+/* =========================
+   Reduced motion（降低動態）
+========================= */
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior: auto; }
   .marquee__track{ animation: none !important; }
   .band .band-inner{ transform:none !important; opacity: 1 !important; transition: none !important; }
   .band{ transition: none !important; }
-  
-}
-
-/* ===== HERO Parallax Layer ===== */
-.hero{
-  position: relative;
-}
-
-/* 把封面圖當成 overlay 的一個獨立圖層 */
-.hero__overlay{
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-/* 圖片層：用 transform 做微視差 */
-.hero__overlay::before{
-  content:"";
-  position:absolute;
-  inset:-6% 0;
-  background-image: url("img/6.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transform: translate3d(0, var(--hero-shift, 0px), 0);
-  will-change: transform;
-}
-
-
-/* 你原本的點陣層，保留，但改成 ::after，疊在圖片上 */
-.hero__overlay::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
-  background-size: 18px 18px;
-  opacity:.6;
-}
-
-/* 你原本 hero 的藍色濾鏡：改交給 hero 本身（不動你文字層） */
-.hero{
-  background-image: linear-gradient(
-    140deg,
-    rgba(11,44,61,.78) 0%,
-    rgba(15,58,82,.72) 60%,
-    rgba(11,44,61,.82) 100%
-  );
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* 降低動態：完全關閉視差 */
-@media (prefers-reduced-motion: reduce){
   .hero__overlay::before{ transform:none !important; }
-}
-
-/* ===== Marquee → 一整條紙帶（方形、無卡片感） ===== */
-
-/* 紙帶本體：方形、邊框更像紙邊 */
-.marquee{
-  border-radius: 0;
-  background: rgba(255,255,255,.82);
-  border: 1px solid rgba(15,23,42,.14);
-  box-shadow: 0 18px 50px rgba(0,0,0,.12);
-}
-
-/* 邊緣柔焦：改成「淡淡的紙邊遮罩」不要像玻璃卡 */
-.marquee::before,
-.marquee::after{
-  width: 64px;
-}
-
-/* 軌道：把間距縮小，讓它像貼在同一條紙上 */
-.marquee__track{
-  gap: 10px;
-  padding: 14px 14px;
-}
-
-/* 每張作品：取消卡片陰影，改成「紙上貼圖」 */
-.shot{
-  border-radius: 0;
-  box-shadow: none;
-  border: 1px solid rgba(15,23,42,.12);
-  background: #fff;
-}
-
-/* 圖片：方形、乾淨 */
-.shot img{
-  border-radius: 0;
-  transform: none;
-}
-
-/* Active 藍底時：紙帶仍然是「深色環境下的一條帶」 */
-.band.is-active .marquee{
-  background: rgba(0,0,0,.10);
-  border-color: rgba(255,255,255,.16);
-  box-shadow: 0 26px 70px rgba(0,0,0,.30);
-}
-.band.is-active .shot{
-  border-color: rgba(255,255,255,.14);
-}
-
-/* 手機：更像帶狀，稍微縮小間距 */
-@media (max-width: 720px){
-  .marquee__track{
-    padding: 12px;
-    gap: 8px;
-  }
-}
-
-.logo-mark{
-  font-family:"Noto Serif TC", serif;
-  font-weight:700;
-  letter-spacing:.08em;
-}
-
-.logo-text .en{
-  font-size: 12px;
-  opacity:.75;
-}
-
-.logo-img{
-  height: 36px;
-  width: auto;
 }
