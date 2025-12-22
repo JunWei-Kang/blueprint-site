@@ -739,3 +739,8 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   font-size: 12px;
   opacity:.75;
 }
+
+.logo-img{
+  height: 36px;
+  width: auto;
+}
