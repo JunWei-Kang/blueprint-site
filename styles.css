@@ -44,7 +44,6 @@ body{
   flex-wrap:wrap;
 }
 
-/* ✅ 你想放圖片 logo 的版本：用 center 對齊（不要 baseline） */
 .nav__brand{
   display:flex;
   align-items:center;
@@ -53,7 +52,6 @@ body{
   font-family:"Noto Serif TC", serif;
 }
 
-/* 可選：如果你還保留 dot 的 HTML */
 .dot{ width:10px;height:10px;border-radius:999px; background:#fff; opacity:.85; }
 
 .logo-img{
@@ -61,7 +59,7 @@ body{
   height: 34px;
   object-fit: cover;
   display:block;
-  border-radius: 6px; /* 想完全方形改 0 */
+  border-radius: 6px;
 }
 
 .logo-text{
@@ -91,7 +89,6 @@ body{
 }
 .nav__links a:hover{ opacity:1; }
 
-/* 導覽列隨區塊高亮 */
 .nav__links a.is-active{ opacity: 1; }
 .nav__links a.is-active::after{
   content:"";
@@ -105,9 +102,9 @@ body{
 }
 
 /* =========================
-   HERO（封面照片＋非常輕微視差）
-   - hero 只放藍色濾鏡
-   - 照片放在 .hero__overlay::before
+   HERO（封面照片＋非常輕微視差 + 景深模糊）
+   - 照片放在 .hero__overlay::before（blur）
+   - 點陣+暗遮罩放在 .hero__overlay::after
 ========================= */
 .hero{
   position: relative;
@@ -115,8 +112,9 @@ body{
   display: flex;
   align-items: center;
   overflow: hidden;
+  color:#fff;
 
-  /* 藍色濾鏡（不含照片） */
+  /* 底層藍色濾鏡（保留你的氛圍） */
   background-image: linear-gradient(
     140deg,
     rgba(11,44,61,.78) 0%,
@@ -133,32 +131,47 @@ body{
   inset:0;
   pointer-events:none;
   overflow:hidden;
+  z-index: 0;
 }
 
-/* 照片層：用 transform 做非常輕微視差（JS 設定 --hero-shift） */
+/* ✅ 照片層：加 blur 造成景深感 + 仍保留輕微視差 */
 .hero__overlay::before{
   content:"";
   position:absolute;
-  inset:-6% 0; /* 稍微放大，避免位移露邊 */
+  inset:-10% -6%; /* blur 會吃邊，四周放大避免露白邊 */
   background-image: url("img/6.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  transform: translate3d(0, var(--hero-shift, 0px), 0);
-  will-change: transform;
+
+  filter: blur(14px) saturate(1.05) contrast(1.02);
+  transform: translate3d(0, var(--hero-shift, 0px), 0) scale(1.10);
+  will-change: transform, filter;
 }
 
-/* 點陣層（疊在照片上） */
+/* ✅ 點陣層 + 額外暗遮罩（讓文字永遠清楚） */
 .hero__overlay::after{
   content:"";
   position:absolute;
   inset:0;
-  background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
-  background-size: 18px 18px;
-  opacity:.6;
+  background-image:
+    radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+    linear-gradient(
+      140deg,
+      rgba(11,44,61,.55) 0%,
+      rgba(15,58,82,.40) 60%,
+      rgba(11,44,61,.60) 100%
+    );
+  background-size: 18px 18px, cover;
+  opacity: 1;
+  pointer-events:none;
 }
 
-.hero__content{ position:relative; padding: 90px 0 70px; color:#fff; }
+.hero__content{
+  position:relative;
+  z-index: 2;
+  padding: 90px 0 70px;
+}
 
 .kicker{
   font-family:"Noto Serif TC", serif;
@@ -178,14 +191,50 @@ body{
   opacity:.92;
   margin: 0 0 18px;
 }
-.hero__chips{ display:flex; gap:10px; flex-wrap:wrap; margin: 10px 0 26px; }
-.chip{
-  border:1px solid rgba(255,255,255,.28);
-  padding: 8px 12px;
+
+/* ✅ 文字更穩：避免亮部吃字 */
+.hero .kicker,
+.hero .subtitle,
+.hero h1{
+  text-shadow: 0 2px 18px rgba(0,0,0,.35);
+}
+
+/* ✅ chips（配合 HTML 已改成 <a class="chip">） */
+.hero__chips{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin: 10px 0 26px;
+}
+
+.hero__chips .chip{
+  display:inline-flex;
+  align-items:center;
+  gap: 6px;
+  color: rgba(255,255,255,.92);
+  text-decoration: none;
+
+  background: rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.26);
+  padding: 9px 13px;
   border-radius: 999px;
   font-size: 14px;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
 }
+.hero__chips .chip:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.36);
+}
+.hero__chips .chip:focus-visible{
+  outline: 2px solid rgba(255,255,255,.85);
+  outline-offset: 3px;
+}
+
+/* 如果你未來又要放 CTA，可保留 */
 .cta{
   display:inline-block;
   color:#fff;
@@ -225,7 +274,6 @@ body{
   z-index: 1;
 }
 
-/* 藍底漸變層（active 才顯示） */
 .band .band-bg{
   position:absolute;
   inset:0;
@@ -235,10 +283,8 @@ body{
   z-index: 0;
 }
 
-/* 內容層 */
 .band .band-inner{ position: relative; z-index: 2; }
 
-/* ===== Band 斜切陰影 ===== */
 .band::before,
 .band::after{
   content:"";
@@ -274,7 +320,6 @@ body{
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 100%);
 }
 
-/* Active：藍底 + 陰影 */
 .band.is-active{
   color: #fff;
   box-shadow: var(--shadowBand);
@@ -294,7 +339,6 @@ body{
   );
 }
 
-/* 文字跟著區塊浮現 */
 .band .band-inner{
   opacity: 0;
   transform: translateY(18px);
@@ -305,7 +349,6 @@ body{
   transform: translateY(0);
 }
 
-/* 字色收斂 */
 .band :is(h2,h3,p,li){ color: var(--ink); }
 .band.is-active :is(h2,h3,p,li){ color: rgba(255,255,255,.92); }
 .band.is-active a{
@@ -313,7 +356,6 @@ body{
   text-decoration-color: rgba(255,255,255,.35);
 }
 
-/* Chapter meta */
 .meta,
 .chapter{
   font-family:"Noto Serif TC", serif;
@@ -326,7 +368,6 @@ body{
 .band.is-active .meta,
 .band.is-active .chapter{ opacity: .80; }
 
-/* Typography */
 h2{
   font-family:"Noto Serif TC", serif;
   font-size: 28px;
@@ -484,7 +525,6 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   position: relative;
 }
 
-/* 紙帶邊緣遮罩 */
 .marquee::before,
 .marquee::after{
   content:"";
@@ -536,7 +576,6 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   transform: none;
 }
 
-/* Active 藍底時 */
 .band.is-active .marquee{
   background: rgba(0,0,0,.10);
   border-color: rgba(255,255,255,.16);
@@ -552,7 +591,6 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   border-color: rgba(255,255,255,.14);
 }
 
-/* 無縫移動：走一半（因為你複製兩輪） */
 @keyframes marqueeMove{
   from{ transform: translateX(0); }
   to{ transform: translateX(-50%); }
@@ -637,12 +675,10 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   );
 }
 
-/* 最後一個 band：取消下緣翻頁（after） */
 .band:last-of-type::after{
   display: none;
 }
 
-/* 你已改用 marquee，因此隱藏舊 grid（若 HTML 還殘留） */
 .grid{ display:none; }
 
 /* =========================
@@ -654,60 +690,4 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   .band .band-inner{ transform:none !important; opacity: 1 !important; transition: none !important; }
   .band{ transition: none !important; }
   .hero__overlay::before{ transform:none !important; }
-}
-
-/* ✅ 全站平滑捲動（不用 JS） */
-html { scroll-behavior: smooth; }
-
-/* ✅ Hero 的遮罩與層級：讓字清楚、按鈕可點 */
-.hero { position: relative; color: #fff; }
-.hero__overlay{
-  position: absolute;
-  inset: 0;
-  /* 深色遮罩（可改深淺：0.45~0.65） */
-  background: rgba(10, 25, 55, 0.55);
-  /* 關鍵：遮罩不要擋點擊 */
-  pointer-events: none;
-  z-index: 0;
-}
-.hero__content{
-  position: relative;
-  z-index: 1;
-}
-
-/* ✅ 讓字更穩（小陰影可避免白葉片吃字） */
-.hero .kicker,
-.hero .subtitle,
-.hero h1{
-  text-shadow: 0 2px 18px rgba(0,0,0,.35);
-}
-
-/* ✅ chip 變成可點按鈕（a） */
-.hero__chips{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
-}
-.hero__chips .chip{
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 14px;
-  border-radius: 999px;
-  text-decoration: none;
-  color: rgba(255,255,255,.92);
-  background: rgba(255,255,255,.14);
-  border: 1px solid rgba(255,255,255,.22);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  transition: transform .15s ease, background .15s ease, border-color .15s ease;
-}
-.hero__chips .chip:hover{
-  transform: translateY(-1px);
-  background: rgba(255,255,255,.18);
-  border-color: rgba(255,255,255,.35);
-}
-.hero__chips .chip:focus-visible{
-  outline: 2px solid rgba(255,255,255,.85);
-  outline-offset: 3px;
 }
