@@ -698,71 +698,98 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 .faq{
   margin-top: 22px;
   border-radius: 16px;
-  background: rgba(255,255,255,.55); /* 明顯淺於 band */
-  border: 1px solid rgba(15,23,42,.18);
   overflow: hidden;
+
+  /* 讓 FAQ 明顯淺於 band，且有「卡片感」 */
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(15,23,42,.14);
+  box-shadow: 0 12px 32px rgba(0,0,0,.08);
 }
 
+/* band 變藍底時：FAQ 仍要比背景更亮（像霧面板） */
 .band.is-active .faq{
-  background: rgba(255,255,255,.14);
-  border-color: rgba(255,255,255,.26);
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.22);
+  box-shadow: 0 18px 44px rgba(0,0,0,.22);
 }
 
-/* 單一問題 */
+/* 單一問題：用更「深」的線段做區隔 */
 .faq-item{
-  border-bottom: 1px solid rgba(15,23,42,.55); /* 深色分隔線 */
+  border-bottom: 1px solid rgba(15,23,42,.40);
 }
-
 .band.is-active .faq-item{
-  border-bottom-color: rgba(255,255,255,.45);
+  border-bottom-color: rgba(255,255,255,.34);
 }
+.faq-item:last-child{ border-bottom: none; }
 
-.faq-item:last-child{
-  border-bottom: none;
-}
-
-/* summary = 問題本身 */
+/* 問題列 */
 .faq-item summary{
-  list-style: none;            /* 移除預設箭頭 */
+  list-style: none;                 /* 移除預設箭頭 */
   cursor: pointer;
   padding: 16px 18px;
   font-size: 16px;
-  font-weight: 600;
-  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.6;
+  color: rgba(15,23,42,.92);
+  user-select: none;
 }
-
 .band.is-active .faq-item summary{
-  color: #fff;
+  color: rgba(255,255,255,.95);
 }
 
 /* 移除 Chrome 預設箭頭 */
-.faq-item summary::-webkit-details-marker{
-  display: none;
+.faq-item summary::-webkit-details-marker{ display:none; }
+
+/* Hover/Focus：讓它「像按鈕」但不需要箭頭 */
+.faq-item summary:hover{
+  background: rgba(15,23,42,.04);
+}
+.band.is-active .faq-item summary:hover{
+  background: rgba(255,255,255,.06);
+}
+.faq-item summary:focus-visible{
+  outline: 2px solid rgba(15,23,42,.55);
+  outline-offset: -2px;
+}
+.band.is-active .faq-item summary:focus-visible{
+  outline-color: rgba(255,255,255,.70);
 }
 
-/* 回答內容 */
+/* 回答區：顏色更收斂，閱讀更舒服 */
 .faq-answer{
   padding: 0 18px 18px;
 }
-
 .faq-answer p{
-  margin: 8px 0;
-  line-height: 1.85;
+  margin: 10px 0;
+  line-height: 1.9;
   font-size: 15px;
-  color: rgba(15,23,42,.9);
+  color: rgba(15,23,42,.88);
 }
-
 .band.is-active .faq-answer p{
-  color: rgba(255,255,255,.9);
+  color: rgba(255,255,255,.88);
 }
 
-/* 開啟時的微動畫（尊重 reduced motion） */
+/* 開啟時：加一條淡淡內縮線，讓「展開」更明確 */
+.faq-item[open] summary{
+  background: rgba(15,23,42,.05);
+}
+.band.is-active .faq-item[open] summary{
+  background: rgba(255,255,255,.08);
+}
+.faq-item[open] .faq-answer{
+  border-top: 1px solid rgba(15,23,42,.14);
+  padding-top: 12px;
+}
+.band.is-active .faq-item[open] .faq-answer{
+  border-top-color: rgba(255,255,255,.18);
+}
+
+/* 微動畫（尊重 reduced motion） */
 @media (prefers-reduced-motion: no-preference){
   .faq-item[open] .faq-answer{
-    animation: faqFade .25s ease;
+    animation: faqFade .22s ease;
   }
 }
-
 @keyframes faqFade{
   from{ opacity: 0; transform: translateY(-4px); }
   to{ opacity: 1; transform: translateY(0); }
