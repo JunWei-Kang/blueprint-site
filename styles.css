@@ -755,28 +755,37 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 }
 
 /* =========================
-   Rail（直線｜5 點均分｜覆蓋用）
-   貼在 styles.css 最底部，覆蓋原本 nth-child top 設定
+   Rail 
+   - 文字變亮好讀
+   - 圓點改實心
 ========================= */
 
-/* 直線容器保持 520px（你原本的高度） */
-.rail__nav{
-  height: 520px !important;
+/* 文字預設就亮一點（不是 active 也看得清楚） */
+.rail__label{
+  color: rgba(15,23,42,.82) !important; /* ✅ 更亮 */
+  opacity: 1 !important;
+  font-weight: 700;
 }
 
-/* ✅ 均分：用 CSS 變數控制位置
-   - 5 個點：index 0~4
-   - padding：上下各留 16px
-*/
-.rail__item{
-  top: calc(
-    16px + (var(--i) * (520px - 32px) / 4)
-  ) !important;
+/* 圓點：改成實心 */
+.rail__dot{
+  background: rgba(11,44,61,.75) !important;  /* ✅ 實心 */
+  border: 0 !important;                      /* 不要空心框 */
+  box-shadow: 0 6px 18px rgba(0,0,0,.10);    /* 輕微立體感（可刪） */
 }
 
-/* 對應 5 個項目的 index（你的 HTML 順序：svg + 5 個 a，所以 a 是 nth-child(2~6)） */
-.rail__item:nth-child(2){ --i: 0; }
-.rail__item:nth-child(3){ --i: 1; }
-.rail__item:nth-child(4){ --i: 2; }
-.rail__item:nth-child(5){ --i: 3; }
-.rail__item:nth-child(6){ --i: 4; }
+/* hover：文字再亮一點 */
+.rail__item:hover .rail__label{
+  color: rgba(15,23,42,.92) !important;
+}
+
+/* active：只讓文字更亮 + 微放大（無膠囊） */
+.rail__item.is-active .rail__label{
+  color: rgba(255,255,255,.95) !important;  /* ✅ 你原本想要的亮色 */
+  transform: scale(1.08);
+}
+
+/* active：實心圓點也跟著亮 */
+.rail__item.is-active .rail__dot{
+  background: rgba(255,255,255,.92) !important;
+}
