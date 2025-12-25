@@ -892,8 +892,8 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 }
 
 .rail__item.is-active .rail__label{
-  transform: scale(1.08);
-  opacity: 1;
+  color: rgba(255,255,255,.95);             /* 亮色文字 */
+  transform: scale(1.06);                   /* 很克制的放大 */
 }
 
 /* band 變藍底時：rail 也要能看見（切成白字系） */
@@ -919,20 +919,24 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 }
 
 /* =========================
-   Side Chapter Rail（極簡版：只亮文字）
+   Rail 最終版：不要膠囊，只亮文字
+   （放在 styles.css 最後面，蓋掉前面所有 rail 規則）
 ========================= */
+
+/* rail 基本定位（保留） */
 .rail{
   position: fixed;
   left: 18px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 60;
+  pointer-events: none;
 }
-
 .rail__nav{
   position: relative;
   width: 220px;
   height: 520px;
+  pointer-events: auto;
 }
 
 /* 弧線 */
@@ -950,19 +954,21 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   stroke-width: 2;
 }
 
-/* item：不給任何底色 */
+/* item：❌ 完全不要膠囊 */
 .rail__item{
   position: absolute;
   left: 0;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-
   text-decoration: none;
-  color: rgba(15,23,42,.45);
 
   padding: 4px 0;
-  transition: color .18s ease, transform .18s ease;
+  border-radius: 0 !important;
+  background: transparent !important;      /* ✅ 永遠不會填底 */
+  box-shadow: none !important;
+
+  transition: none;
 }
 
 /* 位置（svg 是第 1 個 child） */
@@ -972,42 +978,48 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 .rail__item:nth-child(5){ top: 360px; }
 .rail__item:nth-child(6){ top: 474px; }
 
-/* 圓點：固定、不中斷、不變色 */
+/* hover/active 也一律不要底色 */
+.rail__item:hover,
+.rail__item.is-active{
+  background: transparent !important;      /* ✅ 禁止膠囊 */
+}
+
+/* 圓點（你想要也可留著；不影響膠囊） */
 .rail__dot{
   width: 10px;
   height: 10px;
   border-radius: 999px;
   background: rgba(11,44,61,.55);
-  flex-shrink: 0;
+  border: none;
+  box-shadow: none;
 }
 
-/* 文字 */
+/* 文字：預設偏淡 */
 .rail__label{
   font-size: 14px;
   font-weight: 600;
   letter-spacing: .02em;
+  color: rgba(15,23,42,.45);
   opacity: .85;
-  transition: transform .18s ease, opacity .18s ease;
+  transform: none;
+  transition: color .18s ease, opacity .18s ease, transform .18s ease;
 }
 
-/* hover：只稍微亮 */
-.rail__item:hover .rail__label{
-  opacity: 1;
-}
-
-/* ✅ active：只有文字變亮、微放大 */
+/* ✅ active：只讓文字變亮（可微放大） */
 .rail__item.is-active .rail__label{
   color: rgba(11,44,61,.95);
   opacity: 1;
-  transform: scale(1.08);
+  transform: scale(1.06);
 }
 
-/* band 變藍底時：文字切白色系 */
-.band.is-active .rail__item .rail__label{
+/* band 變藍底時：active 文字亮（白系），非 active 淡白 */
+.band.is-active .rail__label{
   color: rgba(255,255,255,.55);
+  opacity: .9;
 }
 .band.is-active .rail__item.is-active .rail__label{
   color: rgba(255,255,255,.95);
+  opacity: 1;
 }
 
 /* 手機隱藏 */
