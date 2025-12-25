@@ -40,46 +40,41 @@
     </div>
   </nav>
 
-  <!-- Side Chapter Rail -->
-<aside class="rail" aria-label="章節導覽">
-  <nav class="rail__nav">
-    <!-- 弧線（用 SVG 畫一條曲線） -->
-    <svg class="rail__curve" viewBox="0 0 120 520" aria-hidden="true">
-      <!-- 你可調整曲線：M 起點、C 控制點 -->
-      <path id="railpath" d="M90 10 C 10 120, 10 400, 90 510"></path>
-    </svg>
+  <!-- Side Chapter Rail（直線版） -->
+  <aside class="rail" aria-label="章節導覽">
+    <nav class="rail__nav">
+      <!-- 直線（純裝飾） -->
+      <span class="rail__line" aria-hidden="true"></span>
 
-    <!-- 節點清單 -->
-    <a class="rail__item" href="#story" data-target="story">
-      <span class="rail__dot" aria-hidden="true"></span>
-      <span class="rail__label">故事</span>
-    </a>
+      <a class="rail__item" href="#story" data-target="story">
+        <span class="rail__dot" aria-hidden="true"></span>
+        <span class="rail__label">故事</span>
+      </a>
 
-    <a class="rail__item" href="#principle" data-target="principle">
-      <span class="rail__dot" aria-hidden="true"></span>
-      <span class="rail__label">原理</span>
-    </a>
+      <a class="rail__item" href="#principle" data-target="principle">
+        <span class="rail__dot" aria-hidden="true"></span>
+        <span class="rail__label">原理</span>
+      </a>
 
-    <a class="rail__item" href="#howto" data-target="howto">
-      <span class="rail__dot" aria-hidden="true"></span>
-      <span class="rail__label">步驟</span>
-    </a>
+      <a class="rail__item" href="#howto" data-target="howto">
+        <span class="rail__dot" aria-hidden="true"></span>
+        <span class="rail__label">步驟</span>
+      </a>
 
-    <a class="rail__item" href="#faq" data-target="faq">
-      <span class="rail__dot" aria-hidden="true"></span>
-      <span class="rail__label">常見問題</span>
-    </a>
+      <a class="rail__item" href="#faq" data-target="faq">
+        <span class="rail__dot" aria-hidden="true"></span>
+        <span class="rail__label">常見問題</span>
+      </a>
 
-    <a class="rail__item" href="#gallery" data-target="gallery">
-      <span class="rail__dot" aria-hidden="true"></span>
-      <span class="rail__label">成果</span>
-    </a>
-  </nav>
-</aside>
+      <a class="rail__item" href="#gallery" data-target="gallery">
+        <span class="rail__dot" aria-hidden="true"></span>
+        <span class="rail__label">成果</span>
+      </a>
+    </nav>
+  </aside>
 
   <!-- Hero -->
   <header class="hero" id="top">
-    <!-- ✅ 遮罩保留，但要靠 CSS 確保不擋點擊 -->
     <div class="hero__overlay" aria-hidden="true"></div>
 
     <div class="container hero__content">
@@ -87,7 +82,6 @@
       <h1>Blue Print Studio</h1>
       <p class="subtitle">以光與時間，將影子留在普魯士的藍調中</p>
 
-      <!-- ✅ 原本 span 改成可點的 a：頁內快速導覽 -->
       <nav class="hero__chips" aria-label="快速導覽">
         <a class="chip" href="#story">故事</a>
         <a class="chip" href="#principle">原理</a>
@@ -95,9 +89,6 @@
         <a class="chip" href="#faq">常見問題</a>
         <a class="chip" href="#gallery">成果照片</a>
       </nav>
-
-      <!-- ✅ 你說「開始滾動」語意不明：移除 -->
-      <!-- <a class="cta" href="#story">開始滾動 ↓</a> -->
     </div>
   </header>
 
@@ -131,215 +122,4 @@
         <div class="split">
           <div class="mini">
             <h3>一句話版</h3>
-            <p>陽光＝啟動反應；遮蔽物＝控制曝光；清水＝顯出對比。</p>
-          </div>
-          <div class="mini">
-            <h3>教學提示</h3>
-            <p>你可以在這格放一張「曝曬前/後」對比圖或原理示意圖。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Howto + Video -->
-    <section id="howto" class="band">
-      <div class="band-bg" aria-hidden="true"></div>
-      <div class="container band-inner">
-        <div class="chapter">Chapter 03</div>
-        <h2>步驟</h2>
-
-        <div class="howto-grid">
-          <div class="howto-text">
-            <div class="steps">
-              <div class="step">
-                <div class="step__no">01</div>
-                <div>
-                  <h3>準備材料</h3>
-                  <p>藍曬紙（或自行塗佈紙）、遮蔽物（植物/剪影/底片）、透明板、夾子、清水、晾乾空間。</p>
-                </div>
-              </div>
-
-              <div class="step">
-                <div class="step__no">02</div>
-                <div>
-                  <h3>構圖與固定</h3>
-                  <p>把遮蔽物放上紙面，用透明板壓緊並固定，避免曝光時移位造成重影。</p>
-                </div>
-              </div>
-
-              <div class="step">
-                <div class="step__no">03</div>
-                <div>
-                  <h3>曝光</h3>
-                  <p>放在日照下曝光。時間取決於日光強度（可在此補充判斷方法）。</p>
-                </div>
-              </div>
-
-              <div class="step">
-                <div class="step__no">04</div>
-                <div>
-                  <h3>顯影與乾燥</h3>
-                  <p>用清水沖洗到背景乾淨，平放陰乾。乾燥後藍色更穩定、對比更清楚。</p>
-                </div>
-              </div>
-            </div>
-
-            <p class="note note--subtle">根據上述步驟若遇到問題，可參照 CHAPTER 04 常見問題。</p>
-          </div>
-
-          <div class="howto-video">
-            <div class="video-wrap">
-              <div class="video">
-                <iframe
-                  src="https://www.youtube-nocookie.com/embed/CzohwpnUCpA"
-                  title="藍曬工坊操作影片（教學示範）"
-                  frameborder="0"
-                  loading="lazy"
-                  referrerpolicy="strict-origin-when-cross-origin"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
-              </div>
-              <div class="video-caption">影片：藍曬操作教學示範</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="band">
-      <div class="band-bg" aria-hidden="true"></div>
-      <div class="container band-inner">
-        <div class="chapter">Chapter 04</div>
-        <h2>常見問題｜製作時遇到的困難與排解</h2>
-    
-        <div class="faq">
-          <details class="faq-item">
-            <summary>為什麼一沖水，畫面就變得很白、幾乎沒有藍色？</summary>
-            <div class="faq-answer">
-              <p>
-                這通常代表<strong>曝光嚴重不足</strong>。藍曬是利用紫外線將鐵鹽轉化為不溶於水的普魯士藍，
-                若曝曬時間過短，反應僅停留在紙張表層，尚未固定的色素會在沖洗時被水帶走，
-                造成畫面變白或只剩淡淡的淺藍。
-              </p>
-              <p>
-                正確的觀察指標是：曝曬時受光處應從黃綠色逐漸轉為深藍，
-                最後呈現出帶有金屬感的<strong>灰綠色或銅鏽色</strong>，
-                這代表反應已深入紙張纖維，洗出的藍色才會厚實穩定。
-              </p>
-            </div>
-          </details>
-    
-          <details class="faq-item">
-            <summary>為什麼作品一碰到水，藍色就快速變淡甚至褪色？</summary>
-            <div class="faq-answer">
-              <p>
-                這通常與<strong>沖洗水質偏鹼性</strong>有關。某些地區的自來水含有較多礦物質，
-                或 pH 值偏高，會在沖洗過程中對剛生成的藍色產生輕微的「漂白」作用，
-                使色彩迅速淡化。
-              </p>
-              <p>
-                改善方式是在第一道沖洗水盆中加入<strong>少量白醋或檸檬酸</strong>，
-                建立微酸性的水浴環境。這不僅能中和自來水的鹼性，
-                也能幫助普魯士藍更加穩定地附著，使亮部更乾淨、暗部更深邃。
-              </p>
-            </div>
-          </details>
-    
-          <details class="faq-item">
-            <summary>畫面出現模糊暈染，甚至藥水黏在玻璃或植物上，該怎麼辦？</summary>
-            <div class="faq-answer">
-              <p>
-                這多半是因為<strong>藥水尚未乾透或塗佈不均</strong>。
-                當紙張纖維仍含有水分就進行曝曬，水分子會干擾感光反應，
-                造成影像模糊、邊緣暈染。
-              </p>
-              <p>
-                若藥水在受熱時仍濕潤，還可能黏附在植物或壓框玻璃上，
-                不僅破壞作品細節，也容易弄髒材料。
-                務必在<strong>全黑環境中徹底陰乾</strong>後再進行曝曬，
-                可使用吹風機冷風加速乾燥。
-              </p>
-            </div>
-          </details>
-    
-          <details class="faq-item">
-            <summary>植物輪廓不清楚，白影中卻出現藍色斑點是什麼原因？</summary>
-            <div class="faq-answer">
-              <p>
-                這通常是因為<strong>植物不夠服貼或遮光力不足</strong>。
-                若沒有使用足夠重量的玻璃壓緊，
-                植物與紙張間的縫隙會讓光線產生繞射，
-                使輪廓邊緣變得模糊。
-              </p>
-              <p>
-                此外，較薄的花瓣並非完全不透光，
-                紫外線可能穿透纖維，使原本應該純白的區域變成淺藍。
-                新鮮植物在曝曬時釋放的水分，也可能與藥水反應形成雜點。
-                建議使用<strong>乾燥壓花</strong>，並以厚重玻璃將植物完全壓平。
-              </p>
-            </div>
-          </details>
-    
-          <details class="faq-item">
-            <summary>亮部泛黃，或存放一段時間後整張作品變髒，怎麼避免？</summary>
-            <div class="faq-answer">
-              <p>
-                這代表<strong>水洗不夠徹底</strong>，有未反應的鐵鹽殘留在紙張纖維中。
-                這些殘留物會呈現黃褐色，並在室內微光下持續緩慢感光，
-                使作品隨時間逐漸變黃。
-              </p>
-              <p>
-                正確做法是持續沖洗，直到流出的水完全透明，
-                且原本呈黃色的感光液區域完全轉為乾淨的白色。
-                一般建議<strong>水洗至少 10～15 分鐘</strong>，才能確保作品長期穩定保存。
-              </p>
-            </div>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <!-- Gallery（Marquee） -->
-    <section id="gallery" class="band">
-      <div class="band-bg" aria-hidden="true"></div>
-      <div class="container band-inner">
-        <div class="chapter">Chapter 05</div>
-        <h2>成果｜作品展示</h2>
-
-        <div class="marquee" aria-label="作品跑馬燈展示">
-          <div class="marquee__track">
-            <figure class="shot"><img src="img/1.jpg" alt="藍曬作品 1" loading="lazy" decoding="async"></figure>
-            <figure class="shot"><img src="img/2.jpg" alt="藍曬作品 2" loading="lazy" decoding="async"></figure>
-            <figure class="shot"><img src="img/3.jpg" alt="藍曬作品 3" loading="lazy" decoding="async"></figure>
-            <figure class="shot"><img src="img/4.jpg" alt="藍曬作品 4" loading="lazy" decoding="async"></figure>
-            <figure class="shot"><img src="img/5.jpg" alt="藍曬作品 5" loading="lazy" decoding="async"></figure>
-
-            <figure class="shot" aria-hidden="true"><img src="img/1.jpg" alt="" loading="lazy" decoding="async"></figure>
-            <figure class="shot" aria-hidden="true"><img src="img/2.jpg" alt="" loading="lazy" decoding="async"></figure>
-            <figure class="shot" aria-hidden="true"><img src="img/3.jpg" alt="" loading="lazy" decoding="async"></figure>
-            <figure class="shot" aria-hidden="true"><img src="img/4.jpg" alt="" loading="lazy" decoding="async"></figure>
-            <figure class="shot" aria-hidden="true"><img src="img/5.jpg" alt="" loading="lazy" decoding="async"></figure>
-          </div>
-        </div>
-
-        <p class="quote">「每一張藍曬，都是一次光與時間的合作。」</p>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div class="container footer__bar">
-        <div>
-          <div class="brand">藍曬工坊 Blue Print Studio</div>
-          <div class="muted">Prussian Blue × White · Workshop landing page</div>
-        </div>
-        <a class="top" href="#top">回到頂部 ↑</a>
-      </div>
-    </footer>
-  </main>
-
-  <script src="script.js" defer></script>
-</body>
-</html>
-
-
+            <p>陽光＝啟動反應；遮蔽物＝控制曝光；清水＝顯出對
