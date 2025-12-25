@@ -655,3 +655,59 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   .band{ transition: none !important; }
   .hero__overlay::before{ transform:none !important; }
 }
+
+/* ✅ 全站平滑捲動（不用 JS） */
+html { scroll-behavior: smooth; }
+
+/* ✅ Hero 的遮罩與層級：讓字清楚、按鈕可點 */
+.hero { position: relative; color: #fff; }
+.hero__overlay{
+  position: absolute;
+  inset: 0;
+  /* 深色遮罩（可改深淺：0.45~0.65） */
+  background: rgba(10, 25, 55, 0.55);
+  /* 關鍵：遮罩不要擋點擊 */
+  pointer-events: none;
+  z-index: 0;
+}
+.hero__content{
+  position: relative;
+  z-index: 1;
+}
+
+/* ✅ 讓字更穩（小陰影可避免白葉片吃字） */
+.hero .kicker,
+.hero .subtitle,
+.hero h1{
+  text-shadow: 0 2px 18px rgba(0,0,0,.35);
+}
+
+/* ✅ chip 變成可點按鈕（a） */
+.hero__chips{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.hero__chips .chip{
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.hero__chips .chip:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.35);
+}
+.hero__chips .chip:focus-visible{
+  outline: 2px solid rgba(255,255,255,.85);
+  outline-offset: 3px;
+}
