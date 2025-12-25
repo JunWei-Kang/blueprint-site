@@ -759,33 +759,46 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
    - 文字變亮好讀
    - 圓點改實心
 ========================= */
+/* rail 整體顏色策略：永遠用亮色 */
+.rail{
+  color: #fff;
+}
 
-/* 文字預設就亮一點（不是 active 也看得清楚） */
+/* 文字：直接改成高對比亮色 + 陰影 */
 .rail__label{
-  color: rgba(15,23,42,.82) !important; /* ✅ 更亮 */
+  color: rgba(255,255,255,.92) !important;   /* ✅ 關鍵 */
   opacity: 1 !important;
   font-weight: 700;
+  letter-spacing: .04em;
+
+  /* 提升可讀性的關鍵 */
+  text-shadow:
+    0 1px 3px rgba(0,0,0,.55),
+    0 0 1px rgba(0,0,0,.6);
 }
 
-/* 圓點：改成實心 */
+/* 圓點：實心、亮、可見 */
 .rail__dot{
-  background: rgba(11,44,61,.75) !important;  /* ✅ 實心 */
-  border: 0 !important;                      /* 不要空心框 */
-  box-shadow: 0 6px 18px rgba(0,0,0,.10);    /* 輕微立體感（可刪） */
+  width: 12px;
+  height: 12px;
+  background: rgba(255,255,255,.85) !important;
+  border: 0 !important;
+  box-shadow:
+    0 0 0 2px rgba(11,44,61,.45), /* 與背景拉開 */
+    0 6px 18px rgba(0,0,0,.25);
 }
 
-/* hover：文字再亮一點 */
+/* hover：只加亮，不加底色 */
 .rail__item:hover .rail__label{
-  color: rgba(15,23,42,.92) !important;
+  color: #fff !important;
 }
 
-/* active：只讓文字更亮 + 微放大（無膠囊） */
+/* active：再亮一階 + 微放大 */
 .rail__item.is-active .rail__label{
-  color: rgba(255,255,255,.95) !important;  /* ✅ 你原本想要的亮色 */
-  transform: scale(1.08);
+  color: #ffffff !important;
+  transform: scale(1.1);
 }
 
-/* active：實心圓點也跟著亮 */
 .rail__item.is-active .rail__dot{
-  background: rgba(255,255,255,.92) !important;
+  background: #ffffff !important;
 }
