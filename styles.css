@@ -857,3 +857,25 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 .rail__item.is-active .rail__dot{
   background: #fff !important;
 }
+
+/* ===== Principle：移除兩窗格，改成一段補充說明 ===== */
+.principle-note{
+  margin-top: 22px;
+  max-width: 860px;
+}
+
+.principle-note h3{
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-family: "Noto Serif TC", serif;
+}
+
+.principle-note p{
+  margin: 10px 0;
+  line-height: 1.9;
+}
+
+/* band 變藍底時，保持一致可讀 */
+.band.is-active .principle-note p{
+  color: rgba(255,255,255,.9);
+}
