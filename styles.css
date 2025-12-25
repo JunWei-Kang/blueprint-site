@@ -754,57 +754,78 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   to{ opacity: 1; transform: translateY(0); }
 }
 
-/* =========================================================
-   ✅ Side Chapter Rail（直線版・可點擊・無膠囊・只亮文字）
-   需要你的 HTML 有：.rail > .rail__nav > .rail__line + 多個 .rail__item
-========================================================= */
+/* =========================
+   Rail（直線版｜覆蓋用：請放在 styles.css 最底部）
+   - 不刪你原本內容：把 SVG 曲線隱藏，改用 ::before 畫直線
+   - 圓點中空 + 文字 active 變亮
+========================= */
+
 .rail{
   position: fixed;
   left: 18px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 60;
-  pointer-events: none; /* 外層不吃點擊 */
 }
 
 .rail__nav{
   position: relative;
-  padding-left: 18px;
-  pointer-events: auto; /* nav 可點 */
+  width: 220px;
+  height: 520px;
 }
 
-/* 直線（圓點會在這條線上） */
-.rail__line{
-  position: absolute;
-  left: 5px;               /* 圓點中心對齊這裡 */
-  top: 0;
-  bottom: 0;
+/* ✅ 隱藏原本 SVG 曲線（保留 HTML 但不顯示） */
+.rail__curve{ display:none !important; }
+
+/* ✅ 用純 CSS 畫直線 */
+.rail__nav::before{
+  content:"";
+  position:absolute;
+  left: 14px;              /* 直線的 x 位置 */
+  top: 8px;
+  bottom: 8px;
   width: 2px;
-  background: rgba(11,44,61,.35);
-  border-radius: 999px;
+  background: rgba(11,44,61,.30);
+  border-radius: 2px;
 }
 
-/* item：無底色、無膠囊 */
+/* item：不給膠囊、不給底色 */
 .rail__item{
-  position: relative;
-  display: flex;
+  position: absolute;
+  left: 0;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
-
-  margin: 26px 0;
   text-decoration: none;
+
   background: transparent !important;
   border: 0 !important;
-  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 2px 0 !important;
 }
 
-/* 圓點：中空（不填滿） */
+/* ✅ 位置（注意：因為 SVG 被隱藏了，現在 nth-child(1) 不影響也沒關係）
+   你的 HTML 順序是：svg + 5 個 a
+   所以 a 的 nth-child 是 2~6
+*/
+.rail__item:nth-child(2){ top: 18px; }
+.rail__item:nth-child(3){ top: 130px; }
+.rail__item:nth-child(4){ top: 245px; }
+.rail__item:nth-child(5){ top: 360px; }
+.rail__item:nth-child(6){ top: 474px; }
+
+/* ✅ 圓點：中空，並且「中心」對準直線 */
 .rail__dot{
   width: 12px;
   height: 12px;
   border-radius: 999px;
-  background: transparent;                 /* ✅ 不填滿 */
+
+  background: transparent;                 /* 不填滿 */
   border: 2px solid rgba(11,44,61,.45);
+
+  /* 把 dot 推到直線上：直線 left=14px，dot 寬12 => dot 左=14-6=8 */
+  margin-left: 8px;
   flex: 0 0 auto;
 }
 
@@ -819,40 +840,45 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   transition: color .18s ease, transform .18s ease, opacity .18s ease;
 }
 
-/* hover：不加底色，只提高可讀性 */
+/* hover：只讓文字更清楚，不要底色 */
 .rail__item:hover .rail__label{ opacity: 1; }
 
-/* ✅ active：只亮文字 + 微放大 */
+/* ✅ active：只亮文字＋微放大 */
 .rail__item.is-active .rail__label{
   color: rgba(11,44,61,.95);
   opacity: 1;
   transform: scale(1.06);
 }
 
-/* active：圓點仍中空，只讓邊框亮一點 */
+/* active：圓點仍中空，邊框更亮 */
 .rail__item.is-active .rail__dot{
   background: transparent;
-  border-color: rgba(11,44,61,.85);
+  border-color: rgba(11,44,61,.90);
 }
 
-/* （可選）整站進入藍底區塊時，讓 rail 更看得見 */
-.band.is-active ~ .rail .rail__line{
-  background: rgba(255,255,255,.20);
+/* band 變藍底時：rail 轉白系（確保可見） */
+.band.is-active ~ .rail .rail__nav::before,
+.band.is-active .rail__nav::before{
+  background: rgba(255,255,255,.28);
 }
-.band.is-active ~ .rail .rail__dot{
-  border-color: rgba(255,255,255,.45);
-}
-.band.is-active ~ .rail .rail__label{
+.band.is-active ~ .rail .rail__label,
+.band.is-active .rail__label{
   color: rgba(255,255,255,.55);
 }
-.band.is-active ~ .rail .rail__item.is-active .rail__label{
+.band.is-active ~ .rail .rail__item.is-active .rail__label,
+.band.is-active .rail__item.is-active .rail__label{
   color: rgba(255,255,255,.95);
 }
-.band.is-active ~ .rail .rail__item.is-active .rail__dot{
-  border-color: rgba(255,255,255,.90);
+.band.is-active ~ .rail .rail__dot,
+.band.is-active .rail__dot{
+  border-color: rgba(255,255,255,.40);
+}
+.band.is-active ~ .rail .rail__item.is-active .rail__dot,
+.band.is-active .rail__item.is-active .rail__dot{
+  border-color: rgba(255,255,255,.92);
 }
 
-/* 手機隱藏 */
+/* 手機隱藏（避免擋畫面） */
 @media (max-width: 900px){
-  .rail{ display:none; }
+  .rail{ display:none !important; }
 }
