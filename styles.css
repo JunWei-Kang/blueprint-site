@@ -917,3 +917,100 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 @media (max-width: 900px){
   .rail{ display:none; }
 }
+
+/* =========================
+   Side Chapter Rail（極簡版：只亮文字）
+========================= */
+.rail{
+  position: fixed;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 60;
+}
+
+.rail__nav{
+  position: relative;
+  width: 220px;
+  height: 520px;
+}
+
+/* 弧線 */
+.rail__curve{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 80px;
+  height: 520px;
+  opacity: .55;
+}
+.rail__curve path{
+  fill: none;
+  stroke: rgba(11,44,61,.35);
+  stroke-width: 2;
+}
+
+/* item：不給任何底色 */
+.rail__item{
+  position: absolute;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  text-decoration: none;
+  color: rgba(15,23,42,.45);
+
+  padding: 4px 0;
+  transition: color .18s ease, transform .18s ease;
+}
+
+/* 位置（svg 是第 1 個 child） */
+.rail__item:nth-child(2){ top: 18px; }
+.rail__item:nth-child(3){ top: 130px; }
+.rail__item:nth-child(4){ top: 245px; }
+.rail__item:nth-child(5){ top: 360px; }
+.rail__item:nth-child(6){ top: 474px; }
+
+/* 圓點：固定、不中斷、不變色 */
+.rail__dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(11,44,61,.55);
+  flex-shrink: 0;
+}
+
+/* 文字 */
+.rail__label{
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  opacity: .85;
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+/* hover：只稍微亮 */
+.rail__item:hover .rail__label{
+  opacity: 1;
+}
+
+/* ✅ active：只有文字變亮、微放大 */
+.rail__item.is-active .rail__label{
+  color: rgba(11,44,61,.95);
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+/* band 變藍底時：文字切白色系 */
+.band.is-active .rail__item .rail__label{
+  color: rgba(255,255,255,.55);
+}
+.band.is-active .rail__item.is-active .rail__label{
+  color: rgba(255,255,255,.95);
+}
+
+/* 手機隱藏 */
+@media (max-width: 900px){
+  .rail{ display:none; }
+}
