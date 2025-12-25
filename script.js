@@ -122,46 +122,52 @@ navWatchTargets.forEach((el) => navIO.observe(el));
   window.addEventListener("resize", () => requestAnimationFrame(update), { passive: true });
 })();
 
-/* ===== Rail: 把每個節點放到 SVG 弧線上 ===== */
+/* ===== Rail: 把每個節點放到 SVG 弧線上（CTM 版：精準貼線） ===== */
 (() => {
-  const path = document.querySelector("#railPath");
   const nav = document.querySelector(".rail__nav");
+  const svg = document.querySelector(".rail__curve");
+  const path = document.querySelector("#railPath");
   const items = Array.from(document.querySelectorAll(".rail__item"));
-  if (!path || !nav || items.length === 0) return;
+  if (!nav || !svg || !path || items.length === 0) return;
 
-  // 你有 5 個主題 → 給 5 個比例點（可微調）
-  const t = items.length === 5
-    ? [0.06, 0.28, 0.50, 0.72, 0.94]
-    : items.map((_, i) => (i + 0.5) / items.length);
+  // 你有 5 個主題就用這組（可微調比例點）
+  const ratios =
+    items.length === 5
+      ? [0.06, 0.28, 0.50, 0.72, 0.94]
+      : items.map((_, i) => (i + 0.5) / items.length);
 
   const place = () => {
+    const navRect = nav.getBoundingClientRect();
     const total = path.getTotalLength();
 
-    // SVG 在頁面上的縮放比例
-    const svg = path.ownerSVGElement;
-    const svgRect = svg.getBoundingClientRect();
-    const viewW = svg.viewBox.baseVal.width || 120;
-    const viewH = svg.viewBox.baseVal.height || 520;
-    const sx = svgRect.width / viewW;
-    const sy = svgRect.height / viewH;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return;
 
-    t.forEach((ratio, i) => {
-      const p = path.getPointAtLength(total * ratio);
-
-      // 把 SVG 座標轉成 nav 內的像素座標
-      const x = p.x * sx;
-      const y = p.y * sy;
-
+    ratios.forEach((r, i) => {
       const el = items[i];
       if (!el) return;
 
-      // 讓圓點中心落在弧線上：
-      // 左邊 x 貼近曲線點，再把文字往右推
-      el.style.left = `${x - 6}px`;  // 6 = dot 半徑 (12/2)
-      el.style.top  = `${y - 10}px`; // 10 = 讓整個 item 垂直置中（可微調）
+      // 取弧線上的點（SVG 內座標）
+      const p = path.getPointAtLength(total * r);
+
+      // 轉成螢幕座標
+      const screenX = p.x * ctm.a + p.y * ctm.c + ctm.e;
+      const screenY = p.x * ctm.b + p.y * ctm.d + ctm.f;
+
+      // 再轉成 nav 內座標
+      const x = screenX - navRect.left;
+      const y = screenY - navRect.top;
+
+      // 讓「圓點中心」貼在弧線上
+      const dot = el.querySelector(".rail__dot");
+      const dotSize = dot ? dot.getBoundingClientRect().width : 12;
+
+      el.style.left = `${x - dotSize / 2}px`;
+      el.style.top = `${y - 10}px`; // 10 是讓整個 item 垂直視覺置中（可微調）
     });
   };
 
+  // 初始與重算
   place();
   window.addEventListener("resize", place, { passive: true });
 })();
