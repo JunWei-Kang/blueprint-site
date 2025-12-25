@@ -794,3 +794,126 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
   from{ opacity: 0; transform: translateY(-4px); }
   to{ opacity: 1; transform: translateY(0); }
 }
+
+/* =========================
+   Side Chapter Rail（左側點點弧線導覽）
+========================= */
+.rail{
+  position: fixed;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 60;
+  pointer-events: none; /* 外框不吃點擊，裡面 item 才吃 */
+}
+
+.rail__nav{
+  position: relative;
+  width: 220px;
+  height: 520px;
+  pointer-events: auto;
+}
+
+/* 弧線 */
+.rail__curve{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 90px;
+  height: 520px;
+  opacity: .55;
+}
+.rail__curve path{
+  fill: none;
+  stroke: rgba(11,44,61,.35);
+  stroke-width: 2.2;
+}
+
+.band.is-active ~ .rail .rail__curve path{ /* 不一定會觸發，保留即可 */
+  stroke: rgba(255,255,255,.25);
+}
+
+/* 每個 item：用 absolute 排成固定節點位置（5 個章節） */
+.rail__item{
+  position: absolute;
+  left: 22px; /* 讓點點靠近弧線 */
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: rgba(15,23,42,.55);
+  padding: 6px 8px;
+  border-radius: 999px;
+  transition: transform .18s ease, color .18s ease, background .18s ease;
+}
+
+/* 依序排位置（你章節有 5 個） */
+.rail__item:nth-child(2){ top: 18px; }   /* story（注意：nth-child(1) 是 svg） */
+.rail__item:nth-child(3){ top: 130px; }  /* principle */
+.rail__item:nth-child(4){ top: 245px; }  /* howto */
+.rail__item:nth-child(5){ top: 360px; }  /* faq */
+.rail__item:nth-child(6){ top: 474px; }  /* gallery */
+
+.rail__dot{
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid rgba(11,44,61,.40);
+  background: rgba(255,255,255,.85);
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.rail__label{
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  transition: transform .18s ease, opacity .18s ease;
+  opacity: .85;
+}
+
+/* hover：稍微亮一點 */
+.rail__item:hover{
+  background: rgba(255,255,255,.60);
+  color: rgba(15,23,42,.80);
+}
+
+/* active：點亮 + 放大 */
+.rail__item.is-active{
+  color: rgba(15,23,42,.92);
+  transform: translateX(6px) scale(1.02);
+  background: rgba(255,255,255,.72);
+}
+
+.rail__item.is-active .rail__dot{
+  border-color: rgba(11,44,61,.85);
+  background: rgba(255,255,255,1);
+  transform: scale(1.25);
+}
+
+.rail__item.is-active .rail__label{
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+/* band 變藍底時：rail 也要能看見（切成白字系） */
+.band.is-active .rail__item{
+  color: rgba(255,255,255,.68);
+}
+.band.is-active .rail__dot{
+  border-color: rgba(255,255,255,.45);
+  background: rgba(11,44,61,.35);
+}
+.band.is-active .rail__item.is-active{
+  color: rgba(255,255,255,.95);
+  background: rgba(255,255,255,.10);
+}
+.band.is-active .rail__item.is-active .rail__dot{
+  border-color: rgba(255,255,255,.85);
+  background: rgba(255,255,255,.22);
+}
+
+/* 手機隱藏（避免擋畫面） */
+@media (max-width: 900px){
+  .rail{ display:none; }
+}
