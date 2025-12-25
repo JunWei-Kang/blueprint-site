@@ -1,5 +1,6 @@
 const bands = document.querySelectorAll(".band");
 const navLinks = document.querySelectorAll(".nav__links a");
+const railItems = document.querySelectorAll(".rail__item");
 
 const prefersReducedMotion =
   window.matchMedia &&
@@ -31,10 +32,19 @@ if (prefersReducedMotion) {
 const heroTop = document.querySelector("#top");
 
 const setActiveNav = (id) => {
+  // top nav
   navLinks.forEach((a) => a.classList.remove("is-active"));
-  if (!id) return;
-  const link = document.querySelector(`.nav__links a[href="#${id}"]`);
-  if (link) link.classList.add("is-active");
+  if (id) {
+    const link = document.querySelector(`.nav__links a[href="#${id}"]`);
+    if (link) link.classList.add("is-active");
+  }
+
+  // ✅ side rail
+  railItems.forEach((el) => el.classList.remove("is-active"));
+  if (id) {
+    const activeRail = document.querySelector(`.rail__item[data-target="${id}"]`);
+    if (activeRail) activeRail.classList.add("is-active");
+  }
 };
 
 const navWatchTargets = [];
@@ -113,3 +123,4 @@ navWatchTargets.forEach((el) => navIO.observe(el));
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", () => requestAnimationFrame(update), { passive: true });
 })();
+
