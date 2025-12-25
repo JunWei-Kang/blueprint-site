@@ -40,6 +40,43 @@
     </div>
   </nav>
 
+  <!-- Side Chapter Rail -->
+<aside class="rail" aria-label="章節導覽">
+  <nav class="rail__nav">
+    <!-- 弧線（用 SVG 畫一條曲線） -->
+    <svg class="rail__curve" viewBox="0 0 80 520" aria-hidden="true">
+      <!-- 你可調整曲線：M 起點、C 控制點 -->
+      <path d="M52,20 C18,120 18,400 52,500" />
+    </svg>
+
+    <!-- 節點清單 -->
+    <a class="rail__item" href="#story" data-target="story">
+      <span class="rail__dot" aria-hidden="true"></span>
+      <span class="rail__label">故事</span>
+    </a>
+
+    <a class="rail__item" href="#principle" data-target="principle">
+      <span class="rail__dot" aria-hidden="true"></span>
+      <span class="rail__label">原理</span>
+    </a>
+
+    <a class="rail__item" href="#howto" data-target="howto">
+      <span class="rail__dot" aria-hidden="true"></span>
+      <span class="rail__label">步驟</span>
+    </a>
+
+    <a class="rail__item" href="#faq" data-target="faq">
+      <span class="rail__dot" aria-hidden="true"></span>
+      <span class="rail__label">常見問題</span>
+    </a>
+
+    <a class="rail__item" href="#gallery" data-target="gallery">
+      <span class="rail__dot" aria-hidden="true"></span>
+      <span class="rail__label">成果</span>
+    </a>
+  </nav>
+</aside>
+
   <!-- Hero -->
   <header class="hero" id="top">
     <!-- ✅ 遮罩保留，但要靠 CSS 確保不擋點擊 -->
@@ -304,3 +341,4 @@
   <script src="script.js" defer></script>
 </body>
 </html>
+
