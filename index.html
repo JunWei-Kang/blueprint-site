@@ -41,45 +41,43 @@
   </nav>
 
   <!-- Side Chapter Rail -->
-<aside class="rail" aria-label="章節導覽">
-  <nav class="rail__nav">
-    <!-- 弧線（用 SVG 畫一條曲線） -->
-    <svg class="rail__curve" viewBox="0 0 120 520" aria-hidden="true">
-      <!-- 你可調整曲線：M 起點、C 控制點 -->
-      <path id="railpath" d="M90 10 C 10 120, 10 400, 90 510"></path>
-    </svg>
+  <aside class="rail" aria-label="章節導覽">
+    <nav class="rail__nav">
+      <!-- 弧線（保留不刪：但會被 CSS 隱藏，改用直線） -->
+      <svg class="rail__curve" viewBox="0 0 120 520" aria-hidden="true">
+        <path id="railpath" d="M90 10 C 10 120, 10 400, 90 510"></path>
+      </svg>
 
-    <!-- 節點清單 -->
-    <a class="rail__item" href="#story" data-target="story">
-      <span class="rail__dot" aria-hidden="true"></span>
-      <span class="rail__label">故事</span>
-    </a>
+      <!-- 節點清單 -->
+      <a class="rail__item" href="#story" data-target="story">
+        <span class="rail__dot" aria-hidden="true"></span>
+        <span class="rail__label">故事</span>
+      </a>
 
-    <a class="rail__item" href="#principle" data-target="principle">
-      <span class="rail__dot" aria-hidden="true"></span>
-      <span class="rail__label">原理</span>
-    </a>
+      <a class="rail__item" href="#principle" data-target="principle">
+        <span class="rail__dot" aria-hidden="true"></span>
+        <span class="rail__label">原理</span>
+      </a>
 
-    <a class="rail__item" href="#howto" data-target="howto">
-      <span class="rail__dot" aria-hidden="true"></span>
-      <span class="rail__label">步驟</span>
-    </a>
+      <a class="rail__item" href="#howto" data-target="howto">
+        <span class="rail__dot" aria-hidden="true"></span>
+        <span class="rail__label">步驟</span>
+      </a>
 
-    <a class="rail__item" href="#faq" data-target="faq">
-      <span class="rail__dot" aria-hidden="true"></span>
-      <span class="rail__label">常見問題</span>
-    </a>
+      <a class="rail__item" href="#faq" data-target="faq">
+        <span class="rail__dot" aria-hidden="true"></span>
+        <span class="rail__label">常見問題</span>
+      </a>
 
-    <a class="rail__item" href="#gallery" data-target="gallery">
-      <span class="rail__dot" aria-hidden="true"></span>
-      <span class="rail__label">成果</span>
-    </a>
-  </nav>
-</aside>
+      <a class="rail__item" href="#gallery" data-target="gallery">
+        <span class="rail__dot" aria-hidden="true"></span>
+        <span class="rail__label">成果</span>
+      </a>
+    </nav>
+  </aside>
 
   <!-- Hero -->
   <header class="hero" id="top">
-    <!-- ✅ 遮罩保留，但要靠 CSS 確保不擋點擊 -->
     <div class="hero__overlay" aria-hidden="true"></div>
 
     <div class="container hero__content">
@@ -87,7 +85,6 @@
       <h1>Blue Print Studio</h1>
       <p class="subtitle">以光與時間，將影子留在普魯士的藍調中</p>
 
-      <!-- ✅ 原本 span 改成可點的 a：頁內快速導覽 -->
       <nav class="hero__chips" aria-label="快速導覽">
         <a class="chip" href="#story">故事</a>
         <a class="chip" href="#principle">原理</a>
@@ -95,9 +92,6 @@
         <a class="chip" href="#faq">常見問題</a>
         <a class="chip" href="#gallery">成果照片</a>
       </nav>
-
-      <!-- ✅ 你說「開始滾動」語意不明：移除 -->
-      <!-- <a class="cta" href="#story">開始滾動 ↓</a> -->
     </div>
   </header>
 
@@ -212,7 +206,7 @@
       <div class="container band-inner">
         <div class="chapter">Chapter 04</div>
         <h2>常見問題｜製作時遇到的困難與排解</h2>
-    
+
         <div class="faq">
           <details class="faq-item">
             <summary>為什麼一沖水，畫面就變得很白、幾乎沒有藍色？</summary>
@@ -229,7 +223,7 @@
               </p>
             </div>
           </details>
-    
+
           <details class="faq-item">
             <summary>為什麼作品一碰到水，藍色就快速變淡甚至褪色？</summary>
             <div class="faq-answer">
@@ -245,7 +239,7 @@
               </p>
             </div>
           </details>
-    
+
           <details class="faq-item">
             <summary>畫面出現模糊暈染，甚至藥水黏在玻璃或植物上，該怎麼辦？</summary>
             <div class="faq-answer">
@@ -262,7 +256,7 @@
               </p>
             </div>
           </details>
-    
+
           <details class="faq-item">
             <summary>植物輪廓不清楚，白影中卻出現藍色斑點是什麼原因？</summary>
             <div class="faq-answer">
@@ -280,7 +274,7 @@
               </p>
             </div>
           </details>
-    
+
           <details class="faq-item">
             <summary>亮部泛黃，或存放一段時間後整張作品變髒，怎麼避免？</summary>
             <div class="faq-answer">
