@@ -27,17 +27,35 @@ if (prefersReducedMotion) {
 }
 
 /* 2) Nav highlight（導覽列高亮） */
+/* ✅ 改良：把 Hero(#top) 也納入監聽，回到封面時能清掉高亮 */
+const heroTop = document.querySelector("#top");
+
+const setActiveNav = (id) => {
+  navLinks.forEach((a) => a.classList.remove("is-active"));
+  if (!id) return;
+  const link = document.querySelector(`.nav__links a[href="#${id}"]`);
+  if (link) link.classList.add("is-active");
+};
+
+const navWatchTargets = [];
+bands.forEach((b) => navWatchTargets.push(b));
+if (heroTop) navWatchTargets.push(heroTop);
+
 const navIO = new IntersectionObserver(
   (entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
 
       const id = e.target.getAttribute("id");
-      if (!id) return;
 
-      navLinks.forEach((a) => a.classList.remove("is-active"));
-      const link = document.querySelector(`.nav__links a[href="#${id}"]`);
-      if (link) link.classList.add("is-active");
+      // 在 Hero 區：清掉高亮（或你想高亮某一個也行）
+      if (id === "top") {
+        setActiveNav(null);
+        return;
+      }
+
+      if (!id) return;
+      setActiveNav(id);
     });
   },
   {
@@ -47,7 +65,7 @@ const navIO = new IntersectionObserver(
   }
 );
 
-bands.forEach((b) => navIO.observe(b));
+navWatchTargets.forEach((el) => navIO.observe(el));
 
 /* ===== HERO Parallax (very subtle) ===== */
 (() => {
@@ -63,9 +81,8 @@ bands.forEach((b) => navIO.observe(b));
 
   // 視差幅度（px）：桌機小、手機更小（避免暈）
   const isMobile = window.matchMedia("(max-width: 720px)").matches;
-  const MAX_SHIFT = isMobile ? 8 : 14;   // 非常輕微
+  const MAX_SHIFT = isMobile ? 8 : 14; // 非常輕微
 
-  let latestY = 0;
   let ticking = false;
 
   const update = () => {
@@ -81,22 +98,17 @@ bands.forEach((b) => navIO.observe(b));
     // 反向微移動：看起來像慢慢漂浮
     const shift = -clamped * MAX_SHIFT;
 
-    // 把位移寫到 CSS 變數（只影響 ::before 圖片層）
+    // 寫到 CSS 變數（影響 ::before 圖片層）
     overlay.style.setProperty("--hero-shift", `${shift}px`);
-
-    // 直接操作 ::before 不能用 JS，改用 translate3d 寫到 overlay（作用在 ::before）
-    // 我們在 CSS 用 transform 讀這個變數
   };
 
   const onScroll = () => {
-    latestY = window.scrollY;
     if (!ticking) {
       ticking = true;
       requestAnimationFrame(update);
     }
   };
 
-  // 初始
   requestAnimationFrame(update);
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", () => requestAnimationFrame(update), { passive: true });
