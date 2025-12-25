@@ -41,10 +41,8 @@ const setActiveNav = (id) => {
 
   // ✅ side rail
   railItems.forEach((el) => el.classList.remove("is-active"));
-  if (id) {
-    const activeRail = document.querySelector(`.rail__item[data-target="${id}"]`);
-    if (activeRail) activeRail.classList.add("is-active");
-  }
+const activeRail = document.querySelector(`.rail__item[data-target="${id}"]`);
+if (activeRail) activeRail.classList.add("is-active");
 };
 
 const navWatchTargets = [];
@@ -124,3 +122,46 @@ navWatchTargets.forEach((el) => navIO.observe(el));
   window.addEventListener("resize", () => requestAnimationFrame(update), { passive: true });
 })();
 
+/* ===== Rail: 把每個節點放到 SVG 弧線上 ===== */
+(() => {
+  const path = document.querySelector("#railPath");
+  const nav = document.querySelector(".rail__nav");
+  const items = Array.from(document.querySelectorAll(".rail__item"));
+  if (!path || !nav || items.length === 0) return;
+
+  // 你有 5 個主題 → 給 5 個比例點（可微調）
+  const t = items.length === 5
+    ? [0.06, 0.28, 0.50, 0.72, 0.94]
+    : items.map((_, i) => (i + 0.5) / items.length);
+
+  const place = () => {
+    const total = path.getTotalLength();
+
+    // SVG 在頁面上的縮放比例
+    const svg = path.ownerSVGElement;
+    const svgRect = svg.getBoundingClientRect();
+    const viewW = svg.viewBox.baseVal.width || 120;
+    const viewH = svg.viewBox.baseVal.height || 520;
+    const sx = svgRect.width / viewW;
+    const sy = svgRect.height / viewH;
+
+    t.forEach((ratio, i) => {
+      const p = path.getPointAtLength(total * ratio);
+
+      // 把 SVG 座標轉成 nav 內的像素座標
+      const x = p.x * sx;
+      const y = p.y * sy;
+
+      const el = items[i];
+      if (!el) return;
+
+      // 讓圓點中心落在弧線上：
+      // 左邊 x 貼近曲線點，再把文字往右推
+      el.style.left = `${x - 6}px`;  // 6 = dot 半徑 (12/2)
+      el.style.top  = `${y - 10}px`; // 10 = 讓整個 item 垂直置中（可微調）
+    });
+  };
+
+  place();
+  window.addEventListener("resize", place, { passive: true });
+})();
