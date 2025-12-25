@@ -27,7 +27,7 @@ if (prefersReducedMotion) {
   bands.forEach((b) => bandIO.observe(b));
 }
 
-/* 2) Nav highlight（導覽列高亮 + Side rail 高亮） */
+/* 2) Nav highlight（導覽列高亮） + Rail active */
 const heroTop = document.querySelector("#top");
 
 const setActiveNav = (id) => {
@@ -40,7 +40,6 @@ const setActiveNav = (id) => {
 
   // side rail
   railItems.forEach((el) => el.classList.remove("is-active"));
-  if (!id) return;
   const activeRail = document.querySelector(`.rail__item[data-target="${id}"]`);
   if (activeRail) activeRail.classList.add("is-active");
 };
@@ -75,32 +74,16 @@ const navIO = new IntersectionObserver(
 
 navWatchTargets.forEach((el) => navIO.observe(el));
 
-/* 3) Rail 點擊：捲到對應章節（可保留 href 也可不用） */
-railItems.forEach((item) => {
-  item.addEventListener("click", (ev) => {
-    const id = item.dataset.target;
-    if (!id) return;
-
-    const target = document.getElementById(id);
-    if (!target) return;
-
-    ev.preventDefault();
-
-    // 讓 nav/rail 立即亮（不等 IO）
-    setActiveNav(id);
-
-    target.scrollIntoView({
-      behavior: prefersReducedMotion ? "auto" : "smooth",
-      block: "start",
-    });
-  });
-});
-
 /* ===== HERO Parallax (very subtle) ===== */
 (() => {
   const hero = document.querySelector(".hero");
   const overlay = document.querySelector(".hero__overlay");
   if (!hero || !overlay) return;
+
+  const prefersReducedMotion =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   if (prefersReducedMotion) return;
 
   const isMobile = window.matchMedia("(max-width: 720px)").matches;
