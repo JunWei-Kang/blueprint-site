@@ -1,8 +1,5 @@
 /* =========================
-   styles.css（可直接覆蓋你的版本）
-   - 保留原本整站樣式
-   - 改：左側 Rail → 直線 + 圓點一定在線上
-   - active：只亮文字 + 微放大（無膠囊、無底色、圖形不填滿）
+   styles.css
 ========================= */
 
 :root{
@@ -109,7 +106,7 @@ body{
 }
 
 /* =========================
-   HERO（封面照片＋非常輕微視差 + 景深模糊）
+   HERO
 ========================= */
 .hero{
   position: relative;
@@ -260,7 +257,7 @@ body{
 }
 
 /* =========================
-   BANDS（區塊式浮現）
+   BANDS
 ========================= */
 .band{
   position: relative;
@@ -466,7 +463,7 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 }
 
 /* =========================
-   Howto grid（左文字右影片）
+   Howto grid
 ========================= */
 .howto-grid{
   margin-top: 16px;
@@ -508,7 +505,7 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 }
 
 /* =========================
-   Marquee Gallery（跑馬燈：一整條紙帶）
+   Marquee Gallery
 ========================= */
 .marquee{
   margin-top: 14px;
@@ -674,7 +671,7 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 .grid{ display:none; }
 
 /* =========================
-   Reduced motion（降低動態）
+   Reduced motion
 ========================= */
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior: auto; }
@@ -685,7 +682,7 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 }
 
 /* =========================
-   FAQ（常見問題）
+   FAQ
 ========================= */
 .faq{
   margin-top: 22px;
@@ -755,50 +752,108 @@ p{ line-height: 1.9; font-size: 16px; margin: 10px 0; }
 }
 
 /* =========================
-   Rail 
-   - 文字變亮好讀
-   - 圓點改實心
+   ✅ Rail（直線｜均分｜白字清楚｜實心點）— 最終覆蓋段
 ========================= */
-/* rail 整體顏色策略：永遠用亮色 */
 .rail{
-  color: #fff;
+  position: fixed;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
 }
 
-/* 文字：直接改成高對比亮色 + 陰影 */
-.rail__label{
-  color: rgba(255,255,255,.92) !important;   /* ✅ 關鍵 */
-  opacity: 1 !important;
-  font-weight: 700;
-  letter-spacing: .04em;
-
-  /* 提升可讀性的關鍵 */
-  text-shadow:
-    0 1px 3px rgba(0,0,0,.55),
-    0 0 1px rgba(0,0,0,.6);
+/* 手機隱藏 */
+@media (max-width: 900px){
+  .rail{ display:none !important; }
 }
 
-/* 圓點：實心、亮、可見 */
+.rail__nav{
+  position: relative;
+  width: 240px;
+  height: 520px !important;
+}
+
+/* 不用弧線：保留不刪，但隱藏 */
+.rail__curve{ display:none !important; }
+
+/* 直線：畫在 rail__nav */
+.rail__nav::before{
+  content:"";
+  position:absolute;
+  left: 22px;
+  top: 16px;
+  bottom: 16px;
+  width: 2px;
+  background: rgba(255,255,255,.40);
+  box-shadow: 0 0 0 1px rgba(11,44,61,.25);
+  border-radius: 999px;
+}
+
+/* item：無膠囊、無底色 */
+.rail__item{
+  position: absolute;
+  left: 16px; /* 讓圓點中心落在線上(22px) */
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  text-decoration: none;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 2px 0 !important;
+
+  /* 均分位置：5點 index 0~4 */
+  top: calc(16px + (var(--i) * (520px - 32px) / 4)) !important;
+}
+
+/* 對應 5 個項目（svg 是第 1 個，a 是第 2~6 個） */
+.rail__item:nth-child(2){ --i: 0; }
+.rail__item:nth-child(3){ --i: 1; }
+.rail__item:nth-child(4){ --i: 2; }
+.rail__item:nth-child(5){ --i: 3; }
+.rail__item:nth-child(6){ --i: 4; }
+
+/* 圓點：實心 */
 .rail__dot{
   width: 12px;
   height: 12px;
-  background: rgba(255,255,255,.85) !important;
+  border-radius: 999px;
+  background: rgba(255,255,255,.90) !important;
   border: 0 !important;
+  flex: 0 0 auto;
   box-shadow:
-    0 0 0 2px rgba(11,44,61,.45), /* 與背景拉開 */
+    0 0 0 2px rgba(11,44,61,.45),
     0 6px 18px rgba(0,0,0,.25);
 }
 
-/* hover：只加亮，不加底色 */
+/* 文字：永遠清楚 */
+.rail__label{
+  color: rgba(255,255,255,.92) !important;
+  opacity: 1 !important;
+  font-weight: 800;
+  letter-spacing: .04em;
+  font-size: 14px;
+
+  text-shadow:
+    0 1px 3px rgba(0,0,0,.55),
+    0 0 1px rgba(0,0,0,.6);
+
+  transition: transform .18s ease, color .18s ease, opacity .18s ease;
+}
+
+/* hover：只加亮 */
 .rail__item:hover .rail__label{
   color: #fff !important;
 }
 
-/* active：再亮一階 + 微放大 */
+/* active：只亮文字 + 微放大 */
 .rail__item.is-active .rail__label{
-  color: #ffffff !important;
-  transform: scale(1.1);
+  color: #fff !important;
+  transform: scale(1.10);
 }
 
 .rail__item.is-active .rail__dot{
-  background: #ffffff !important;
+  background: #fff !important;
 }
