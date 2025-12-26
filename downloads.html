@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>表單下載｜藍曬工坊 Blue Print Studio</title>
+  <meta name="description" content="藍曬工坊相關表單與文件下載。" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="img/7.jpg" type="image/jpeg">
+</head>
+
+<body>
+  <!-- Nav（和首頁一致，只有連結不同） -->
+  <nav class="nav" aria-label="主要導覽">
+    <div class="container nav__wrap">
+      <div class="nav__brand">
+        <img src="img/7.jpg" alt="藍曬工坊 Blue Print Studio" class="logo-img">
+        <div class="logo-text">
+          <span class="zh">藍曬工坊</span>
+          <span class="en">Blue Print Studio</span>
+        </div>
+      </div>
+
+      <div class="nav__links">
+        <a href="index.html">回首頁</a>
+        <a href="downloads.html" class="is-active">表單下載</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主內容 -->
+  <main>
+    <section class="band is-active">
+      <div class="band-bg" aria-hidden="true"></div>
+      <div class="container band-inner">
+        <div class="chapter">Downloads</div>
+        <h2>表單下載｜相關文件</h2>
+        <p class="note note--subtle">
+          點擊項目即可開啟或下載檔案。
+        </p>
+
+        <!-- 下載清單 -->
+        <div class="downloads">
+          <a class="dl-item" href="files/1131-add-drop.pdf" download>
+            <span class="dl-icon">📎</span>
+            <span class="dl-title">1131 即時加退申請表</span>
+          </a>
+
+          <a class="dl-item" href="files/internship-rules.pdf" download>
+            <span class="dl-icon">📎</span>
+            <span class="dl-title">物理系暑修相關規定及表格</span>
+          </a>
+
+          <a class="dl-item" href="files/report-format.docx" download>
+            <span class="dl-icon">📎</span>
+            <span class="dl-title">報告格式</span>
+          </a>
+
+          <a class="dl-item" href="files/course-guide.pdf" download>
+            <span class="dl-icon">📎</span>
+            <span class="dl-title">選課輔導單</span>
+          </a>
+
+          <a class="dl-item" href="files/course-confirmation.pdf" download>
+            <span class="dl-icon">📎</span>
+            <span class="dl-title">選課確認單</span>
+          </a>
+        </div>
+
+        <p class="note note--subtle" style="margin-top:24px;">
+          管理者只需更新 <code>/files</code> 資料夾內的檔案，即可同步更新下載內容。
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__bar">
+      <div>
+        <div class="brand">藍曬工坊 Blue Print Studio</div>
+        <div class="muted">Downloads</div>
+      </div>
+      <a class="top" href="index.html">回首頁</a>
+    </div>
+  </footer>
